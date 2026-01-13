@@ -141,7 +141,7 @@ function SolutionBlock({ kicker, title, desc, bullets, reverse, imageSrc }: { ki
 function IjaDronesView({ onBack }: { onBack: () => void }) {
   const [activeTab, setActiveTab] = useState("dashboard")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [state, handleSubmit] = useForm("mreegdqd");
+  const [state, handleSubmit] = useForm("meeeqdzk");
 
   const SidebarItem = ({ id, icon: Icon, label }: any) => (
     <button 
@@ -467,7 +467,7 @@ function IjaDronesView({ onBack }: { onBack: () => void }) {
 function OceanoAzulView({ onNavigateToSystem }: { onNavigateToSystem: () => void }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const [state, handleSubmit] = useForm("mreegdqd");
+  const [state, handleSubmit] = useForm("meeeqdzk");
 
   // Lógica de Física do Drone
   const x = useMotionValue(0)
