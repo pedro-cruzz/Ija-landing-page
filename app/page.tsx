@@ -2,11 +2,9 @@
 
 import React, { useState } from "react"
 import Image from "next/image"
-// ADICIONADO: Hooks para a física do drone
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from "framer-motion"
 import { useForm, ValidationError } from '@formspree/react';
 import {
-  // Ícones
   ArrowRight, Menu, X, Phone, Mail, Facebook, Instagram, Linkedin,
   LayoutDashboard, FileDown, CalendarDays, Users, Bell, Search, Filter,
   Plus, Edit, Trash2, MapPin, Map, Shield, Zap, Sparkles, BarChart3,
@@ -14,6 +12,10 @@ import {
   Target, TrendingUp, Download, CheckCircle2, DollarSign, ChevronRight,
   Paperclip
 } from "lucide-react"
+
+// IMPORTAÇÃO DO SEU LOADING SEPARADO
+// Certifique-se de que o arquivo Preloader.tsx está na mesma pasta
+import Preloader from "./preloader"; 
 
 // ==============================================================================
 // 1. UTILITÁRIOS (ANIMAÇÕES E LAYOUT)
@@ -141,7 +143,7 @@ function SolutionBlock({ kicker, title, desc, bullets, reverse, imageSrc }: { ki
 function IjaDronesView({ onBack }: { onBack: () => void }) {
   const [activeTab, setActiveTab] = useState("dashboard")
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
-  const [state, handleSubmit] = useForm("meeeqdzk");
+  // REMOVIDO: const [state, handleSubmit] = useForm("meeeqdzk"); -> Não é usado aqui e causava erro
 
   const SidebarItem = ({ id, icon: Icon, label }: any) => (
     <button 
@@ -169,7 +171,7 @@ function IjaDronesView({ onBack }: { onBack: () => void }) {
                 </div>
                 
                 <div className="hidden md:flex items-center gap-8">
-                    <span className="text-sm font-medium text-slate-500">IJA System v2.0</span>
+                    <span className="text-sm font-medium text-slate-500">IJA Drones</span>
                     <button className="bg-sky-600 text-white px-6 py-2.5 rounded-full font-bold text-sm shadow-lg shadow-sky-600/20 hover:bg-sky-700 transition-all">
                         Acessar Sistema
                     </button>
@@ -210,7 +212,9 @@ function IjaDronesView({ onBack }: { onBack: () => void }) {
 
                 {/* Lado Direito: Imagem do Drone "Flutuando" */}
                 <div className="flex-1 relative w-full flex justify-center items-center">
-                    <Reveal delay={0.4} className="relative w-full max-w-2xl aspect-square">
+                    
+                    <Reveal delay={0.4} width="100%" className="relative w-full max-w-2xl aspect-square">
+                        
                         {/* Efeito de brilho no fundo */}
                         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[120%] h-[120%] bg-sky-100/50 rounded-full blur-3xl -z-10"></div>
                         
@@ -220,23 +224,17 @@ function IjaDronesView({ onBack }: { onBack: () => void }) {
                             transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }} 
                             className="relative w-full h-full"
                         >
-                            <div className="relative w-full h-full bg-slate-200 rounded-3xl border border-slate-200 shadow-xl overflow-hidden flex items-center justify-center">
+                            {/* Removi o bg-slate-100 para não ficar um quadrado cinza se a imagem falhar */}
+                            <div className="relative w-full h-full rounded-3xl overflow-visible flex items-center justify-center">
                                 
-                                {/* 1. Ícone de Fallback (Aparece se a imagem falhar) */}
-                                <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 z-0">
-                                    <Cloud size={64} className="mb-2 opacity-50"/>
-                                    <span className="text-xs font-bold">A imagem não carregou</span>
-                                    <span className="text-[10px]">Verifique se o arquivo está em: public/drone.png</span>
-                                </div>
-
-                                {/* 2. A Imagem Real (Cobre o ícone se carregar) */}
-                                <Image 
-                                    src="/drone.png"  // <--- CAMINHO SIMPLIFICADO
-                                    alt="Drone IJA System"
-                                    fill 
-                                    className="object-cover z-10" // z-10 garante que fique por cima do texto
-                                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                                {/* TENTATIVA 1: Usando tag img normal para testar o caminho */}
+                                {/* Certifique-se que o arquivo está em: public/images/drone.png */}
+                                <img 
+                                    src="/images/drone.png" 
+                                    alt="Drone IJA drones"
+                                    className="w-full h-full object-contain drop-shadow-2xl z-10"
                                 />
+
                             </div>
                         </motion.div>
                     </Reveal>
@@ -267,7 +265,7 @@ function IjaDronesView({ onBack }: { onBack: () => void }) {
             <div className="flex h-[700px] bg-slate-50/30 text-left">
                 <div className="w-16 md:w-56 bg-white border-r border-slate-200 p-4 flex flex-col justify-between">
                     <div>
-                        <div className="flex items-center gap-2 mb-8 text-slate-800 font-bold"><div className="w-8 h-8 bg-sky-600 rounded-lg flex items-center justify-center text-white"><Zap size={16} fill="currentColor"/></div><span className="hidden md:inline">IJA System</span></div>
+                        <div className="flex items-center gap-2 mb-8 text-slate-800 font-bold"><div className="w-8 h-8 bg-sky-600 rounded-lg flex items-center justify-center text-white"><Zap size={16} fill="currentColor"/></div><span className="hidden md:inline">IJA Drones</span></div>
                         <div className="space-y-1">
                             <SidebarItem id="dashboard" icon={LayoutDashboard} label="Dashboard" />
                             <SidebarItem id="relatorios" icon={FileDown} label="Relatórios" />
@@ -413,20 +411,6 @@ function IjaDronesView({ onBack }: { onBack: () => void }) {
         </Container>
       </Section>
 
-      <Section id="solucoes" className="bg-white">
-        <Container>
-            <div className="space-y-32">
-                <SolutionBlock 
-                    kicker="Agricultura de Precisão" title="Pulverização Agrícola Controlada" desc="Tenha um fluxo padronizado de solicitação de voos, com cálculo de área, insumos e relatórios."
-                    imageSrc="" bullets={["Registro de condições climáticas", "Mapeamento de área aplicada", "Controle de estoque de insumos", "Produtividade por piloto"]}
-                />
-                <SolutionBlock 
-                    reverse kicker="Gestão Pública" title="Combate à Dengue & Inspeções" desc="Ferramenta essencial para prefeituras. Mapeie focos, gere evidências visuais e acompanhe o progresso."
-                    imageSrc="" bullets={["Mapa de calor de focos", "Registro fotográfico", "Divisão por bairros", "Relatórios de conformidade"]}
-                />
-            </div>
-        </Container>
-      </Section>
 
       <Section className="pb-10">
         <Reveal width="100%">
@@ -451,7 +435,7 @@ function IjaDronesView({ onBack }: { onBack: () => void }) {
                 <div><h4 className="font-bold text-white mb-6">Suporte</h4><ul className="space-y-3 text-sm"><li><a href="#" className="hover:text-sky-400 transition-colors">Central de Ajuda</a></li><li><a href="#" className="hover:text-sky-400 transition-colors">Documentação API</a></li><li><a href="#" className="hover:text-sky-400 transition-colors">Status do Sistema</a></li><li><a href="#" className="hover:text-sky-400 transition-colors">Contato</a></li></ul></div>
             </div>
             <div className="border-t border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs text-slate-500">
-                <p>&copy; 2026 IJA System. Todos os direitos reservados.</p>
+                <p>&copy; 2026 IJA Drones. Todos os direitos reservados.</p>
                 <div className="flex gap-6"><a href="#" className="hover:text-white transition-colors">Política de Privacidade</a><a href="#" className="hover:text-white transition-colors">Termos de Uso</a></div>
             </div>
         </Container>
@@ -771,7 +755,7 @@ function OceanoAzulView({ onNavigateToSystem }: { onNavigateToSystem: () => void
          </Container>
       </section>
 
-     
+      
       {/* BENEFÍCIOS - CARDS COM MESMA ALTURA (CORRIGIDO) */}
       <section id="beneficios" className="py-20 bg-slate-50">
          <Container>
@@ -1044,7 +1028,7 @@ function OceanoAzulView({ onNavigateToSystem }: { onNavigateToSystem: () => void
           </Container>
       </section>
 
-{/* FOOTER COMPACTO E VISUALMENTE IDÊNTICO À REFERÊNCIA */}
+      {/* FOOTER COMPACTO E VISUALMENTE IDÊNTICO À REFERÊNCIA */}
       <footer className="bg-[#0f172a] text-slate-300 pt-12 pb-8 border-t border-slate-800">
         <Container>
             {/* Grid ajustado: gap-8 para ficar mais próximo, mb-12 para reduzir altura total */}
@@ -1138,25 +1122,41 @@ function OceanoAzulView({ onNavigateToSystem }: { onNavigateToSystem: () => void
 // ==============================================================================
 
 export default function Page() {
-  const [currentView, setCurrentView] = useState<'home' | 'system'>('home')
+  const [currentView, setCurrentView] = useState<'home' | 'system'>('home');
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <AnimatePresence mode="wait">
-      {currentView === 'home' ? (
-        <motion.div 
-            key="home"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        >
-            <OceanoAzulView onNavigateToSystem={() => setCurrentView('system')} />
-        </motion.div>
-      ) : (
-        <motion.div 
-            key="system"
-            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-        >
-            <IjaDronesView onBack={() => setCurrentView('home')} />
-        </motion.div>
-      )}
-    </AnimatePresence>
+    <>
+      <AnimatePresence mode="wait">
+        {isLoading && (
+           <Preloader onComplete={() => setIsLoading(false)} />
+        )}
+      </AnimatePresence>
+
+      <div style={{ 
+          height: isLoading ? '100vh' : 'auto', 
+          overflow: isLoading ? 'hidden' : 'visible' 
+      }}>
+          
+        <AnimatePresence mode="wait">
+          {currentView === 'home' ? (
+            <motion.div 
+                key="home"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            >
+                <OceanoAzulView onNavigateToSystem={() => setCurrentView('system')} />
+            </motion.div>
+          ) : (
+            <motion.div 
+                key="system"
+                initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            >
+                <IjaDronesView onBack={() => setCurrentView('home')} />
+            </motion.div>
+          )}
+        </AnimatePresence>
+
+      </div>
+    </>
   )
 }
