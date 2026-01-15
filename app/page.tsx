@@ -72,12 +72,13 @@ function IjaDronesView({ onBack, onNavigateToAbout }: { onBack: () => void, onNa
                 <div className="hidden md:flex items-center gap-8">
                     <a href="#" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Início</a>
                     <a href="#sistema-ija" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Sistema</a>
-                    <button 
+                    {/* retirar qundo tiver a área de venda de software *?}
+                    {/* <button 
                         onClick={onNavigateToAbout} 
                         className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors"
                     >
                         Sobre o Produto
-                    </button>
+                    </button> */}
                     <a href="#beneficios-ija" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Recursos</a>
                     <a href="#contato-ija" className="text-sm font-medium text-slate-600 hover:text-blue-600 transition-colors">Contato</a>
                     
