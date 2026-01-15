@@ -156,8 +156,6 @@ function IjaDronesView({ onBack, onNavigateToAbout }: { onBack: () => void, onNa
             </div>
 
             {/* Lado Direito: Imagem do Drone "Flutuando" */}
-            {/* MUDANÇA 3: 'lg:mt-44'. Aumentei muito essa margem. 
-                Como o pai é 'items-start', isso empurra SÓ A IMAGEM para baixo, sem mexer no texto. */}
             <div className="flex-1 lg:w-1/2 relative w-full flex justify-center items-center lg:mt-44">
                 <Reveal
                 delay={0.4}
@@ -213,14 +211,14 @@ function IjaDronesView({ onBack, onNavigateToAbout }: { onBack: () => void, onNa
 
       {/* MOCKUP INTERATIVO */}
       <div className="max-w-7xl mx-auto px-4 mb-32 -mt-8">
-        <AnimatedImageFrame className="shadow-2xl border border-slate-200 bg-white">
+        <div className="shadow-2xl border border-slate-200 bg-white">
             <div className="bg-slate-50 border-b border-slate-200 px-4 py-3 flex items-center gap-4">
                 <div className="flex gap-1.5"><div className="w-3 h-3 rounded-full bg-red-400"/><div className="w-3 h-3 rounded-full bg-amber-400"/><div className="w-3 h-3 rounded-full bg-emerald-400"/></div>
                 <div className="flex-1 bg-white border border-slate-200 h-6 rounded-md flex items-center justify-center text-[10px] text-slate-400 font-mono">app.ijasystem.com/{activeTab}</div>
                 <div className="w-10 flex justify-end text-slate-300"><Bell size={14} /></div>
             </div>
 
-            <div className="flex h-[700px] bg-slate-50/30 text-left">
+            <div className="flex h-[600px] bg-slate-50/30 text-left">
                 {/* SIDEBAR */}
                 <div className="w-16 md:w-56 bg-white border-r border-slate-200 p-4 flex flex-col justify-between">
                     <div>
@@ -248,7 +246,7 @@ function IjaDronesView({ onBack, onNavigateToAbout }: { onBack: () => void, onNa
                         </div>
                     </div>
                     
-                    <div className="flex-1 min-h-0 relative">
+                    <div className="flex-1 min-h-0 relative ">
                         {/* CONTEÚDO DAS ABAS (MANTIDO O MOCKUP ANTERIOR) */}
                         {activeTab === 'dashboard' && (
                             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex flex-col gap-4 h-full">
@@ -289,7 +287,7 @@ function IjaDronesView({ onBack, onNavigateToAbout }: { onBack: () => void, onNa
                                     <div className="flex-1 space-y-3 border-l border-slate-100 pl-0 md:pl-6">
                                         <div className="border border-slate-200 rounded-lg p-3 space-y-3">
                                             <div><span className="text-xs text-slate-500 block mb-1">Status</span><div className="w-full h-8 px-3 rounded border border-slate-200 bg-white text-xs flex items-center justify-between"><div className="flex items-center gap-2"><div className="w-2 h-2 rounded-full bg-emerald-500"/> Aprovar</div><ChevronDown size={12} className="text-slate-400"/></div></div>
-                                            <div><span className="text-xs text-slate-500 block mb-1">Piloto responsável</span><div className="w-full h-8 px-3 rounded border border-slate-200 bg-white text-xs flex items-center justify-between">PH Cruz (LESTE)<ChevronDown size={12} className="text-slate-400"/></div></div>
+                                            <div><span className="text-xs text-slate-500 block mb-1">Piloto responsável</span><div className="w-full h-8 px-3 rounded border border-slate-200 bg-white text-xs flex items-center justify-between">Piloto 1 (LESTE)<ChevronDown size={12} className="text-slate-400"/></div></div>
                                             <button className="w-full h-8 rounded bg-sky-500 text-white text-xs font-bold hover:bg-sky-600 shadow-sm">Salvar</button>
                                         </div>
                                     </div>
@@ -356,11 +354,11 @@ function IjaDronesView({ onBack, onNavigateToAbout }: { onBack: () => void, onNa
                                         </thead>
                                         <tbody className="divide-y divide-slate-50">
                                             {[
-                                                {id: '#7', name: 'Agrotaigo', reg: 'LESTE', tel: '(99) 99999-9999'},
-                                                {id: '#4', name: 'Enzo', reg: 'NORTE', tel: '(35) 90000-0000'},
-                                                {id: '#3', name: 'João Pedro', reg: 'OESTE', tel: '(22) 22222-2222'},
-                                                {id: '#5', name: 'PH Cruz', reg: 'LESTE', tel: '(35) 99860-3656'},
-                                                {id: '#6', name: 'Piloto 01', reg: 'OESTE', tel: '(11) 99999-9999'}
+                                                {id: '#1', name: 'Piloto 1', reg: 'LESTE', tel: '(99) 99999-9999'},
+                                                {id: '#2', name: 'Piloto 2', reg: 'NORTE', tel: '(35) 90000-0000'},
+                                                {id: '#3', name: 'Piloto 3', reg: 'OESTE', tel: '(22) 22222-2222'},
+                                                {id: '#4', name: 'Piloto 4', reg: 'LESTE', tel: '(35) 99860-3656'},
+                                                {id: '#5', name: 'Piloto 5', reg: 'OESTE', tel: '(11) 99999-9999'}
                                             ].map((pilot, i) => (
                                             <tr key={i} className="hover:bg-slate-50">
                                                 <td className="px-4 py-3 text-slate-500">{pilot.id}</td>
@@ -383,7 +381,7 @@ function IjaDronesView({ onBack, onNavigateToAbout }: { onBack: () => void, onNa
                     </div>
                 </div>
             </div>
-        </AnimatedImageFrame>
+        </div>
       </div>
       
       {/* SEÇÃO RECURSOS (CORRIGIDO) */}
@@ -485,7 +483,7 @@ function IjaDronesView({ onBack, onNavigateToAbout }: { onBack: () => void, onNa
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-8 mb-12 items-start">
                 <div className="lg:col-span-4 flex flex-col items-start">
                     <div className="relative w-auto h-16 mb-5 cursor-pointer" onClick={onBack}>
-                          <img src="/images/logo-ija.png" alt="Oceano Azul" className="w-full h-full object-contain object-left"/>
+                          <img src="/images/oceano-azul-logo-sem-fundo.png" alt="Oceano Azul" className="w-full h-full object-contain object-left"/>
                     </div>
                     <p className="text-sm text-slate-400 mb-6 leading-relaxed max-w-sm">Soluções tecnológicas avançadas para o mercado de drones e aviação agrícola.</p>
                 </div>
