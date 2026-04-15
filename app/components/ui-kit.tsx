@@ -1,6 +1,7 @@
 "use client";
 
 import React from "react";
+import type { LucideIcon } from "lucide-react";
 import { motion } from "framer-motion";
 
 // --- 1. REVEAL (ATUALIZADO) ---
@@ -19,6 +20,7 @@ export function Reveal({
   return (
     <div style={{ width }} className={className}>
       <motion.div
+        className="h-full"
         variants={{
           hidden: { opacity: 0, y: 40 },
           visible: { opacity: 1, y: 0 },
@@ -109,14 +111,14 @@ export function FeatureCard({
   desc,
   delay = 0,
 }: {
-  icon: any;
+  icon: LucideIcon;
   title: string;
   desc: string;
   delay?: number;
 }) {
   return (
     <Reveal delay={delay} className="h-full" width="100%">
-      <div className="group relative h-full overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:border-sky-200/50">
+      <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:border-sky-200/50">
         <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 transition-colors group-hover:bg-sky-500 group-hover:text-white">
           <Icon size={24} />
         </div>

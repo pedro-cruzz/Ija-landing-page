@@ -4,11 +4,41 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Fan, Zap } from "lucide-react";
 
+const dronePropellers = [
+  { positionY: "-top-2", positionX: "-left-2", rotation: 360 },
+  { positionY: "-top-2", positionX: "-right-2", rotation: -360 },
+  { positionY: "-bottom-2", positionX: "-left-2", rotation: -360 },
+  { positionY: "-bottom-2", positionX: "-right-2", rotation: 360 },
+];
+
+function CodeDrone() {
+  return (
+    <div className="relative z-10 flex h-40 w-40 items-center justify-center">
+      <div className="absolute h-2 w-[120%] rotate-45 rounded-full bg-slate-700"></div>
+      <div className="absolute h-2 w-[120%] -rotate-45 rounded-full bg-slate-700"></div>
+
+      <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-2xl border-2 border-blue-400 bg-blue-600 shadow-[0_0_30px_rgba(37,99,235,0.6)]">
+        <Zap className="h-8 w-8 fill-white text-white" />
+      </div>
+
+      {dronePropellers.map((propeller) => (
+        <motion.div
+          key={`${propeller.positionY}-${propeller.positionX}`}
+          animate={{ rotate: propeller.rotation }}
+          transition={{ repeat: Infinity, duration: 0.2, ease: "linear" }}
+          className={`absolute ${propeller.positionY} ${propeller.positionX} rounded-full border border-slate-600 bg-slate-800 p-1 shadow-lg`}
+        >
+          <Fan className="h-10 w-10 text-sky-400 opacity-80" />
+        </motion.div>
+      ))}
+    </div>
+  );
+}
+
 function Preloader({ onComplete }: { onComplete: () => void }) {
   const [startExit, setStartExit] = useState(false);
 
   useEffect(() => {
-    // Timer de 3.5 segundos
     const timer = setTimeout(() => {
       setStartExit(true);
       setTimeout(onComplete, 1000);
@@ -17,53 +47,20 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
     return () => clearTimeout(timer);
   }, [onComplete]);
 
-  // Componente Visual do Drone
-  const CodeDrone = () => (
-    <div className="relative w-40 h-40 flex items-center justify-center z-10">
-      {/* 1. Estrutura em X */}
-      <div className="absolute w-[120%] h-2 bg-slate-700 rounded-full rotate-45"></div>
-      <div className="absolute w-[120%] h-2 bg-slate-700 rounded-full -rotate-45"></div>
-
-      {/* 2. Corpo Central */}
-      <div className="relative z-10 w-16 h-16 bg-blue-600 rounded-2xl flex items-center justify-center shadow-[0_0_30px_rgba(37,99,235,0.6)] border-2 border-blue-400">
-        <Zap className="text-white w-8 h-8 fill-white" />
-      </div>
-
-      {/* 3. Hélices */}
-      {[
-        { t: "-top-2", l: "-left-2", r: 360 },
-        { t: "-top-2", l: "-right-2", r: -360 },
-        { t: "-bottom-2", l: "-left-2", r: -360 },
-        { t: "-bottom-2", l: "-right-2", r: 360 },
-      ].map((prop, i) => (
-        <motion.div
-          key={i}
-          animate={{ rotate: prop.r }}
-          transition={{ repeat: Infinity, duration: 0.2, ease: "linear" }}
-          className={`absolute ${prop.t} ${prop.l} bg-slate-800 rounded-full p-1 border border-slate-600 shadow-lg`}
-        >
-          <Fan className="text-sky-400 w-10 h-10 opacity-80" />
-        </motion.div>
-      ))}
-    </div>
-  );
-
   return (
     <motion.div
       initial={{ y: 0 }}
       animate={startExit ? { y: "-100%" } : { y: 0 }}
       transition={{ duration: 0.8, ease: [0.76, 0, 0.24, 1], delay: 0.2 }}
-      className="fixed inset-0 z-[9999] bg-[#0f172a] flex flex-col items-center justify-center overflow-hidden"
+      className="fixed inset-0 z-[9999] flex flex-col items-center justify-center overflow-hidden bg-[#0f172a]"
     >
-      {/* 1. TEXTO (AGORA FICA NO TOPO) */}
       <motion.p
         animate={startExit ? { opacity: 0, y: -20 } : { opacity: 1, y: 0 }}
-        className="text-sky-500 font-bold tracking-[0.3em] text-xs uppercase mb-12 animate-pulse"
+        className="mb-12 animate-pulse text-xs font-bold uppercase tracking-[0.3em] text-sky-500"
       >
         LIGANDO MOTORES...
       </motion.p>
 
-      {/* 2. DRONE E CORDAS (AGORA FICAM EMBAIXO DO TEXTO) */}
       <motion.div
         className="relative flex items-center justify-center"
         initial={{ y: 0, scale: 1 }}
@@ -76,12 +73,10 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
             : { duration: 2, repeat: Infinity, ease: "easeInOut" }
         }
       >
-        {/* AS CORDAS (SVG) */}
         <svg
-          className="absolute w-[600px] h-[600px] -top-20 z-0 pointer-events-none opacity-60"
+          className="pointer-events-none absolute -top-20 z-0 h-[600px] w-[600px] opacity-60"
           viewBox="0 0 100 100"
         >
-          {/* Corda Esquerda */}
           <motion.path
             d="M 50 50 Q 40 80 0 150"
             animate={
@@ -94,7 +89,6 @@ function Preloader({ onComplete }: { onComplete: () => void }) {
             strokeWidth="0.5"
             fill="none"
           />
-          {/* Corda Direita */}
           <motion.path
             d="M 50 50 Q 60 80 100 150"
             animate={
