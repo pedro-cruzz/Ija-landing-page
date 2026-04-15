@@ -2,7 +2,7 @@
 
 import React from "react";
 import { ArrowRight, Zap, CheckCircle2 } from "lucide-react";
-import { Reveal, Container, Section, AnimatedImageFrame } from "./ui-kit"; // Ajuste o caminho do seu UI-KIT se necessário/ ==============================================================================
+import { Reveal, Container, Section } from "./ui-kit"; // Ajuste o caminho do seu UI-KIT se necessário/ ==============================================================================
 
 export default function IJADronesProductView({
   onBack,

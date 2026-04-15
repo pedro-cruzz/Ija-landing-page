@@ -10,7 +10,6 @@ import {
   useSpring,
   useTransform,
 } from "framer-motion";
-import { useForm, ValidationError } from "@formspree/react";
 import {
   ArrowRight,
   Menu,
@@ -46,8 +45,8 @@ import {
   CheckCircle2,
   DollarSign,
   ChevronRight,
-  Paperclip,
   ChevronDown,
+  type LucideIcon,
 } from "lucide-react";
 
 import OceanoAzulAboutView from "./components/OceanoAzulAbout";
@@ -67,30 +66,157 @@ import {
   FeatureCard,
 } from "./components/ui-kit";
 
-// ==============================================================================
-// 2. VIEW: IJA DRONES (O SOFTWARE/SaaS) - COMPLETO
-// ==============================================================================
+type LeadFormField = "name" | "email" | "message" | "form";
 
-function IjaDronesView({
-  onBack,
-  onNavigateToAbout,
-  onNavigateToOceano,
+type LeadFormState = {
+  succeeded: boolean;
+  submitting: boolean;
+  errors: Partial<Record<LeadFormField, string>>;
+};
+
+function createInitialLeadFormState(): LeadFormState {
+  return {
+    succeeded: false,
+    submitting: false,
+    errors: {},
+  };
+}
+
+function FieldError({
+  message,
+  className = "text-red-500 text-xs mt-1",
 }: {
-  onBack: () => void;
-  onNavigateToAbout: () => void;
-  onNavigateToOceano: () => void;
+  message?: string;
+  className?: string;
 }) {
-  const [activeTab, setActiveTab] = useState("dashboard");
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [state, handleSubmit] = useForm("meeeqdzk");
+  if (!message) {
+    return null;
+  }
 
-  React.useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
+  return <p className={className}>{message}</p>;
+}
 
-  const SidebarItem = ({ id, icon: Icon, label }: any) => (
+function useLeadForm(origin: string) {
+  const [state, setState] = useState<LeadFormState>(() =>
+    createInitialLeadFormState()
+  );
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const payload = {
+      nome: String(formData.get("name") ?? "").trim(),
+      email_cliente: String(formData.get("email") ?? "").trim(),
+      telefone: String(formData.get("phone") ?? "").trim(),
+      interesse: String(formData.get("interest") ?? "").trim(),
+      mensagem: String(formData.get("message") ?? "").trim(),
+      origem: origin,
+    };
+
+    const nextErrors: LeadFormState["errors"] = {};
+
+    if (!payload.nome) {
+      nextErrors.name = "Informe seu nome.";
+    }
+
+    if (!payload.email_cliente) {
+      nextErrors.email = "Informe seu e-mail.";
+    }
+
+    if (!payload.mensagem) {
+      nextErrors.message = "Escreva uma mensagem.";
+    }
+
+    if (Object.keys(nextErrors).length > 0) {
+      setState({
+        succeeded: false,
+        submitting: false,
+        errors: nextErrors,
+      });
+      return;
+    }
+
+    setState({
+      succeeded: false,
+      submitting: true,
+      errors: {},
+    });
+
+    try {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+
+      const result = (await response.json().catch(() => null)) as
+        | {
+            message?: string;
+            errors?: LeadFormState["errors"];
+          }
+        | null;
+
+      if (!response.ok) {
+        setState({
+          succeeded: false,
+          submitting: false,
+          errors: {
+            ...(result?.errors ?? {}),
+            form:
+              result?.message ??
+              "Não foi possível enviar sua mensagem agora.",
+          },
+        });
+        return;
+      }
+
+      form.reset();
+      setState({
+        succeeded: true,
+        submitting: false,
+        errors: {},
+      });
+    } catch {
+      setState({
+        succeeded: false,
+        submitting: false,
+        errors: {
+          form:
+            "Não foi possível conectar ao serviço de e-mail. Tente novamente em instantes.",
+        },
+      });
+    }
+  };
+
+  const resetForm = () => {
+    setState(createInitialLeadFormState());
+  };
+
+  return { state, handleSubmit, resetForm };
+}
+
+type SidebarItemProps = {
+  activeTab: string;
+  id: string;
+  icon: LucideIcon;
+  label: string;
+  onSelect: (id: string) => void;
+};
+
+function SidebarItem({
+  activeTab,
+  id,
+  icon: Icon,
+  label,
+  onSelect,
+}: SidebarItemProps) {
+  return (
     <button
-      onClick={() => setActiveTab(id)}
+      onClick={() => onSelect(id)}
       className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg font-medium text-xs md:text-sm transition-all ${
         activeTab === id
           ? "bg-sky-600 text-white shadow-md shadow-sky-600/20"
@@ -101,6 +227,26 @@ function IjaDronesView({
       <span className="hidden md:block">{label}</span>
     </button>
   );
+}
+
+// ==============================================================================
+// 2. VIEW: IJA DRONES (O SOFTWARE/SaaS) - COMPLETO
+// ==============================================================================
+
+function IjaDronesView({
+  onBack,
+  onNavigateToOceano,
+}: {
+  onBack: () => void;
+  onNavigateToOceano: () => void;
+}) {
+  const [activeTab, setActiveTab] = useState("dashboard");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const { state, handleSubmit, resetForm } = useLeadForm("IJA Drones");
+
+  React.useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 
   return (
     <div className="min-h-screen bg-slate-50 font-sans text-slate-900 pb-0">
@@ -113,11 +259,11 @@ function IjaDronesView({
       >
         <Container>
           <div className="flex items-center justify-between h-30">
-            <div className="relative w-60 h-24">
+            <div className="relative w-64 h-24">
               <a href="#">
                 <Image
-                  src="/images/logo-ija.png"
-                  alt="Logo oceano azul"
+                  src="/images/logo-ija-sem-fundo.png"
+                  alt="IJA Drones"
                   fill
                   className="object-contain object-left"
                 />
@@ -268,10 +414,12 @@ function IjaDronesView({
                   className="relative w-full h-full"
                 >
                   <div className="relative w-full h-full rounded-3xl overflow-visible flex items-center justify-center">
-                    <img
+                    <Image
                       src="/images/drone.png"
                       alt="Drone IJA System"
-                      className="w-full h-full object-contain drop-shadow-2xl z-10"
+                      fill
+                      sizes="(min-width: 1024px) 32rem, 100vw"
+                      className="object-contain drop-shadow-2xl z-10"
                     />
                   </div>
                 </motion.div>
@@ -335,17 +483,47 @@ function IjaDronesView({
                 </div>
                 <div className="space-y-1">
                   <SidebarItem
+                    activeTab={activeTab}
                     id="dashboard"
                     icon={LayoutDashboard}
                     label="Dashboard"
+                    onSelect={setActiveTab}
                   />
                   <SidebarItem
+                    activeTab={activeTab}
                     id="relatorios"
                     icon={FileDown}
                     label="Relatórios"
+                    onSelect={setActiveTab}
                   />
-                  <SidebarItem id="agenda" icon={CalendarDays} label="Agenda" />
-                  <SidebarItem id="pilotos" icon={Users} label="Pilotos" />
+                  <SidebarItem
+                    activeTab={activeTab}
+                    id="agenda"
+                    icon={CalendarDays}
+                    label="Agenda"
+                    onSelect={setActiveTab}
+                  />
+                  <SidebarItem
+                    activeTab={activeTab}
+                    id="pilotos"
+                    icon={Users}
+                    label="Pilotos"
+                    onSelect={setActiveTab}
+                  />
+                  <SidebarItem
+                    activeTab={activeTab}
+                    id="equipamentos"
+                    icon={ShieldCheck}
+                    label="Equipamentos"
+                    onSelect={setActiveTab}
+                  />
+                  <SidebarItem
+                    activeTab={activeTab}
+                    id="veiculos"
+                    icon={Map}
+                    label="Veículos"
+                    onSelect={setActiveTab}
+                  />
                 </div>
               </div>
               <div className="hidden md:flex items-center gap-3 p-3 bg-slate-50 rounded-xl border border-slate-100">
@@ -362,13 +540,33 @@ function IjaDronesView({
             <div className="flex-1 p-6 overflow-y-auto bg-slate-50/50 relative">
               <div className="flex justify-between items-center mb-6">
                 <h2 className="text-2xl font-bold text-slate-800 capitalize">
-                  {activeTab === "dashboard" ? "Painel de Gestão" : activeTab}
+                  {activeTab === "dashboard"
+                    ? "Painel de Gestão"
+                    : activeTab === "relatorios"
+                      ? "Relatórios e Exportações"
+                      : activeTab === "agenda"
+                        ? "Agenda, Rotas e KML"
+                        : "Pilotos, Frota e Veículos"}
                 </h2>
                 <div className="flex gap-2">
                   {activeTab === "pilotos" ? (
-                    <button className="h-8 px-3 rounded-lg bg-sky-600 text-white text-xs flex items-center gap-1 font-medium shadow-sm hover:bg-sky-700 transition-colors">
-                      <Plus size={12} /> Novo Piloto
-                    </button>
+                    <>
+                      <button className="h-8 px-3 rounded-lg bg-white border border-slate-200 text-xs flex items-center gap-1 font-medium text-slate-600 shadow-sm">
+                        <Plus size={12} /> Novo Drone
+                      </button>
+                      <button className="h-8 px-3 rounded-lg bg-sky-600 text-white text-xs flex items-center gap-1 font-medium shadow-sm hover:bg-sky-700 transition-colors">
+                        <Plus size={12} /> Novo Piloto
+                      </button>
+                    </>
+                  ) : activeTab === "agenda" ? (
+                    <>
+                      <button className="h-8 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 shadow-sm flex items-center gap-2">
+                        <Filter size={14} /> Filtros
+                      </button>
+                      <button className="h-8 px-3 bg-sky-50 border border-sky-100 rounded-lg text-xs font-medium text-sky-600 shadow-sm flex items-center gap-2">
+                        <Map size={14} /> Importar KML
+                      </button>
+                    </>
                   ) : (
                     <button className="h-8 px-3 bg-white border border-slate-200 rounded-lg text-xs font-medium text-slate-600 shadow-sm flex items-center gap-2">
                       <Filter size={14} /> Filtros
@@ -392,6 +590,62 @@ function IjaDronesView({
                     animate={{ opacity: 1 }}
                     className="flex flex-col gap-4 h-full"
                   >
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 border-l-4 border-l-sky-500">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <div className="text-[11px] font-bold text-slate-400 uppercase">
+                              Drones cadastrados
+                            </div>
+                            <div className="text-3xl font-bold text-slate-800 mt-2">
+                              12
+                            </div>
+                            <div className="text-xs text-sky-600 font-bold mt-3">
+                              Ver frota completa
+                            </div>
+                          </div>
+                          <div className="w-12 h-12 rounded-2xl bg-sky-50 text-sky-500 flex items-center justify-center">
+                            <Zap size={22} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 border-l-4 border-l-amber-400">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <div className="text-[11px] font-bold text-slate-400 uppercase">
+                              Baterias rastreadas
+                            </div>
+                            <div className="text-3xl font-bold text-slate-800 mt-2">
+                              37
+                            </div>
+                            <div className="text-xs text-amber-500 font-bold mt-3">
+                              Ciclos e estoque em tempo real
+                            </div>
+                          </div>
+                          <div className="w-12 h-12 rounded-2xl bg-amber-50 text-amber-500 flex items-center justify-center">
+                            <Sparkles size={20} />
+                          </div>
+                        </div>
+                      </div>
+                      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 border-l-4 border-l-rose-500">
+                        <div className="flex items-start justify-between">
+                          <div>
+                            <div className="text-[11px] font-bold text-slate-400 uppercase">
+                              Em manutenção
+                            </div>
+                            <div className="text-3xl font-bold text-slate-800 mt-2">
+                              3
+                            </div>
+                            <div className="text-xs text-rose-500 font-bold mt-3">
+                              Equipamentos aguardando liberação
+                            </div>
+                          </div>
+                          <div className="w-12 h-12 rounded-2xl bg-rose-50 text-rose-500 flex items-center justify-center">
+                            <ShieldCheck size={20} />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                     <div className="flex justify-between items-center mb-1">
                       <h2 className="text-xl font-bold text-slate-800 flex items-center gap-2">
                         <Shield size={20} className="text-slate-700" /> Detalhes
@@ -512,6 +766,73 @@ function IjaDronesView({
                         </div>
                       </div>
                     </div>
+                    <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                      <div className="px-4 py-3 border-b border-slate-100 flex items-center justify-between">
+                        <h3 className="text-sm font-bold text-slate-800 flex items-center gap-2">
+                          <Clock size={15} className="text-sky-600" />
+                          Atividades recentes de cadastro
+                        </h3>
+                        <span className="text-[11px] text-slate-400">
+                          Equipamentos, drones e baterias
+                        </span>
+                      </div>
+                      <table className="w-full text-left text-xs">
+                        <thead className="bg-[#27558b] text-white uppercase text-[10px]">
+                          <tr>
+                            <th className="px-4 py-3">Tipo</th>
+                            <th className="px-4 py-3">Renomeação / Modelo</th>
+                            <th className="px-4 py-3">Nº de série</th>
+                            <th className="px-4 py-3">Status</th>
+                            <th className="px-4 py-3">Cadastrado em</th>
+                          </tr>
+                        </thead>
+                        <tbody className="divide-y divide-slate-100">
+                          {[
+                            [
+                              "Bateria",
+                              "ANDRE 20",
+                              "7PAKMCBCG22KM3",
+                              "No drone",
+                              "Hoje, 08:42",
+                            ],
+                            [
+                              "Drone",
+                              "ANDRE 020 / Pulverizador",
+                              "OA-DRN-204",
+                              "Ativo",
+                              "Hoje, 09:15",
+                            ],
+                            [
+                              "Bateria",
+                              "PLOA 19",
+                              "7PAKMCBCG228C3",
+                              "Em estoque",
+                              "Ontem, 17:20",
+                            ],
+                          ].map((item, index) => (
+                            <tr key={index} className="hover:bg-slate-50">
+                              <td className="px-4 py-3 font-semibold text-slate-700">
+                                {item[0]}
+                              </td>
+                              <td className="px-4 py-3 text-slate-600">
+                                {item[1]}
+                              </td>
+                              <td className="px-4 py-3 text-slate-400 font-mono">
+                                {item[2]}
+                              </td>
+                              <td className="px-4 py-3">
+                                <span className="px-2 py-1 rounded-full bg-slate-100 text-[10px] font-bold text-slate-600 uppercase">
+                                  {item[3]}
+                                </span>
+                              </td>
+                              <td className="px-4 py-3 text-slate-500">
+                                {item[4]}
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
                   </motion.div>
                 )}
                 {activeTab === "relatorios" && (
@@ -520,6 +841,54 @@ function IjaDronesView({
                     animate={{ opacity: 1, y: 0 }}
                     className="flex flex-col gap-5 h-full"
                   >
+                    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 md:p-5">
+                      <div className="grid grid-cols-1 md:grid-cols-[1fr_1fr_1.4fr_1.4fr_auto_auto] gap-3 items-end">
+                        <div>
+                          <div className="text-[11px] font-bold text-slate-400 uppercase mb-2">
+                            Mês
+                          </div>
+                          <div className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-4 flex items-center justify-between text-sm font-medium text-slate-600">
+                            Todos <ChevronDown size={14} />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[11px] font-bold text-slate-400 uppercase mb-2">
+                            Ano
+                          </div>
+                          <div className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-4 flex items-center justify-between text-sm font-medium text-slate-600">
+                            2026 <ChevronDown size={14} />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[11px] font-bold text-slate-400 uppercase mb-2">
+                            Região
+                          </div>
+                          <div className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-4 flex items-center justify-between text-sm font-medium text-slate-600">
+                            Todas as regiões <ChevronDown size={14} />
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-[11px] font-bold text-slate-400 uppercase mb-2">
+                            UVIS
+                          </div>
+                          <div className="h-11 rounded-xl border border-slate-200 bg-slate-50 px-4 flex items-center justify-between text-sm font-medium text-slate-600">
+                            Todas as unidades <ChevronDown size={14} />
+                          </div>
+                        </div>
+                        <button className="h-11 px-5 rounded-xl bg-sky-600 text-white text-sm font-bold shadow-sm">
+                          Filtrar
+                        </button>
+                        <button className="h-11 px-5 rounded-xl border border-slate-200 bg-white text-sm font-bold text-slate-500">
+                          Limpar
+                        </button>
+                      </div>
+                    </div>
+                    <p className="text-sm text-slate-500">
+                      Período selecionado:{" "}
+                      <span className="font-bold text-slate-700">
+                        Todos os períodos
+                      </span>
+                    </p>
                     <h3 className="text-lg font-bold text-slate-800">
                       Dados de Janeiro / 2026
                     </h3>
@@ -604,6 +973,73 @@ function IjaDronesView({
                             </div>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div className="px-5 py-4 font-bold text-slate-800 flex items-center gap-2">
+                          <MapPin size={16} className="text-sky-600" /> Por
+                          Região
+                        </div>
+                        <table className="w-full text-left text-sm">
+                          <thead className="bg-[#27558b] text-white uppercase text-[10px]">
+                            <tr>
+                              <th className="px-5 py-3">Região</th>
+                              <th className="px-5 py-3 text-right">Total</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {[
+                              ["Centro", "5"],
+                              ["Norte", "2"],
+                              ["Casa Verde", "2"],
+                              ["Leste", "1"],
+                            ].map((item, index) => (
+                              <tr key={index}>
+                                <td className="px-5 py-4 text-slate-700">
+                                  {item[0]}
+                                </td>
+                                <td className="px-5 py-4 text-right font-bold text-slate-700">
+                                  {item[1]}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                      <div className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+                        <div className="px-5 py-4 font-bold text-slate-800 flex items-center gap-2">
+                          <LayoutDashboard
+                            size={16}
+                            className="text-sky-600"
+                          />{" "}
+                          Por UVIS
+                        </div>
+                        <table className="w-full text-left text-sm">
+                          <thead className="bg-[#27558b] text-white uppercase text-[10px]">
+                            <tr>
+                              <th className="px-5 py-3">UVIS</th>
+                              <th className="px-5 py-3 text-right">Total</th>
+                            </tr>
+                          </thead>
+                          <tbody className="divide-y divide-slate-100">
+                            {[
+                              ["UVIS Sé", "4"],
+                              ["UVIS Casa Verde / Cachoeirinha", "2"],
+                              ["UVIS Vila Maria / Vila Guilherme", "2"],
+                              ["UVIS Butantã", "2"],
+                            ].map((item, index) => (
+                              <tr key={index}>
+                                <td className="px-5 py-4 text-slate-700">
+                                  {item[0]}
+                                </td>
+                                <td className="px-5 py-4 text-right font-bold text-slate-700">
+                                  {item[1]}
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
                       </div>
                     </div>
                   </motion.div>
@@ -815,7 +1251,7 @@ function IjaDronesView({
               </p>
             </Reveal>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-1 gap-6 items-stretch sm:grid-cols-2 lg:grid-cols-4">
             <FeatureCard
               title="Mapeamento Inteligente"
               desc="Planejamento automático de rotas e áreas."
@@ -899,7 +1335,7 @@ function IjaDronesView({
                         Email
                       </h4>
                       <p className="text-slate-500 mt-1">
-                        contato@ijasystem.com.br
+                        suporte@ijadrones.com.br
                       </p>
                     </div>
                   </div>
@@ -913,7 +1349,7 @@ function IjaDronesView({
                       <h4 className="font-bold text-slate-900 text-lg">
                         Suporte
                       </h4>
-                      <p className="text-slate-500 mt-1">+55 (11) 98765-4321</p>
+                      <p className="text-slate-500 mt-1">+55 (35) 99239-4222</p>
                     </div>
                   </div>
                 </Reveal>
@@ -948,7 +1384,8 @@ function IjaDronesView({
                     agendar sua demonstração.
                   </p>
                   <button
-                    onClick={() => window.location.reload()}
+                    type="button"
+                    onClick={resetForm}
                     className="text-blue-600 font-bold hover:text-blue-700 hover:underline text-sm transition-colors"
                   >
                     Enviar outra mensagem
@@ -971,12 +1408,7 @@ function IjaDronesView({
                       placeholder="Seu nome"
                       className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all placeholder:text-slate-400"
                     />
-                    <ValidationError
-                      prefix="Nome"
-                      field="name"
-                      errors={state.errors}
-                      className="text-red-500 text-xs mt-1"
-                    />
+                    <FieldError message={state.errors.name} />
                   </div>
                   <div>
                     <label
@@ -993,12 +1425,7 @@ function IjaDronesView({
                       placeholder="seu@email.com"
                       className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all placeholder:text-slate-400"
                     />
-                    <ValidationError
-                      prefix="Email"
-                      field="email"
-                      errors={state.errors}
-                      className="text-red-500 text-xs mt-1"
-                    />
+                    <FieldError message={state.errors.email} />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -1051,13 +1478,12 @@ function IjaDronesView({
                       placeholder="Conte-nos sobre sua operação..."
                       className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all placeholder:text-slate-400 resize-none"
                     ></textarea>
-                    <ValidationError
-                      prefix="Mensagem"
-                      field="message"
-                      errors={state.errors}
-                      className="text-red-500 text-xs mt-1"
-                    />
+                    <FieldError message={state.errors.message} />
                   </div>
+                  <FieldError
+                    message={state.errors.form}
+                    className="text-red-500 text-sm"
+                  />
                   <button
                     type="submit"
                     disabled={state.submitting}
@@ -1088,7 +1514,7 @@ function IjaDronesView({
                         <span>Enviando...</span>
                       </>
                     ) : (
-                      "Solicitar Demo"
+                      "Enviar Mensagem"
                     )}
                   </button>
                 </form>
@@ -1107,10 +1533,12 @@ function IjaDronesView({
                 className="relative w-auto h-16 mb-5 cursor-pointer"
                 onClick={onBack}
               >
-                <img
-                  src="/images/logo-ija.png"
-                  alt="Oceano Azul"
-                  className="w-full h-full object-contain object-left"
+                <Image
+                  src="/images/logo-ija-sem-fundo.png"
+                  alt="IJA Drones"
+                  width={240}
+                  height={68}
+                  className="h-full w-auto object-contain object-left"
                 />
               </div>
               <p className="text-sm text-slate-400 mb-6 leading-relaxed max-w-sm">
@@ -1249,15 +1677,13 @@ function IjaDronesView({
 function OceanoAzulView({
   onNavigateToSystem,
   onNavigateToAboutOceano,
-  onNavigateToAboutIJA,
 }: {
   onNavigateToSystem: () => void;
   onNavigateToAboutOceano: () => void;
-  onNavigateToAboutIJA: () => void;
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [isHovering, setIsHovering] = useState(false);
-  const [state, handleSubmit] = useForm("meeeqdzk");
+  const { state, handleSubmit, resetForm } = useLeadForm("Oceano Azul");
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
@@ -1651,9 +2077,11 @@ function OceanoAzulView({
                       Mapeamento de focos
                     </li>
                   </ul>
-                  <button className="px-6 py-2.5 bg-blue-600 text-white rounded-full font-bold text-sm hover:bg-blue-700 transition-colors">
-                    Solicitar Orçamento
-                  </button>
+                  <a href="#contato-oceano">
+                    <button className="px-6 py-2.5 bg-blue-600 text-white rounded-full font-bold text-sm hover:bg-blue-700 transition-colors">
+                      Solicitar Orçamento
+                    </button>
+                  </a>
                 </div>
               </div>
             </Reveal>
@@ -1685,63 +2113,54 @@ function OceanoAzulView({
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 items-stretch">
-            {/* ... cards mantidos ... */}
-            {[
-              {
-                title: "Economia de Tempo",
-                icon: Clock,
-                desc: "Até 60x mais rápido que pulverização tradicional.",
-              },
-              {
-                title: "Redução de Custos",
-                icon: DollarSign,
-                desc: "Menos desperdício de insumos e mão de obra.",
-              },
-              {
-                title: "Sustentabilidade",
-                icon: Leaf,
-                desc: "Economia de até 90% de água nas aplicações.",
-              },
-              {
-                title: "Precisão Máxima",
-                icon: Target,
-                desc: "Aplicação uniforme em terrenos irregulares.",
-              },
-              {
-                title: "Maior Produtividade",
-                icon: TrendingUp,
-                desc: "Melhor aproveitamento dos defensivos.",
-              },
-              {
-                title: "Segurança",
-                icon: Users,
-                desc: "Menor exposição do trabalhador a agrotóxicos.",
-              },
-              {
-                title: "Equipe Certificada",
-                icon: Shield,
-                desc: "Pilotos competentes e habilitados pela DECEA.",
-              },
-              {
-                title: "Cobertura Regional",
-                icon: MapPin,
-                desc: "Atendimento em toda sua região, garantindo cobertura completa.",
-              },
-            ].map((item, i) => (
-              <Reveal key={i} delay={i * 0.05} className="h-full" width="100%">
-                <div className="h-full p-6 rounded-2xl border border-slate-100 bg-white shadow-sm hover:shadow-md transition-shadow flex flex-col">
-                  <div className="w-10 h-10 bg-blue-50 rounded-lg flex items-center justify-center text-blue-600 mb-4 shrink-0">
-                    <item.icon size={20} />
-                  </div>
-                  <h3 className="text-lg font-bold text-slate-900 mb-2">
-                    {item.title}
-                  </h3>
-                  <p className="text-sm text-slate-500 leading-relaxed flex-1">
-                    {item.desc}
-                  </p>
-                </div>
-              </Reveal>
-            ))}
+            <FeatureCard
+              title="Economia de Tempo"
+              icon={Clock}
+              desc="Até 60x mais rápido que pulverização tradicional."
+              delay={0}
+            />
+            <FeatureCard
+              title="Redução de Custos"
+              icon={DollarSign}
+              desc="Menos desperdício de insumos e mão de obra."
+              delay={0.05}
+            />
+            <FeatureCard
+              title="Sustentabilidade"
+              icon={Leaf}
+              desc="Economia de até 90% de água nas aplicações."
+              delay={0.1}
+            />
+            <FeatureCard
+              title="Precisão Máxima"
+              icon={Target}
+              desc="Aplicação uniforme em terrenos irregulares."
+              delay={0.15}
+            />
+            <FeatureCard
+              title="Maior Produtividade"
+              icon={TrendingUp}
+              desc="Melhor aproveitamento dos defensivos."
+              delay={0.2}
+            />
+            <FeatureCard
+              title="Segurança"
+              icon={Users}
+              desc="Menor exposição do trabalhador a agrotóxicos."
+              delay={0.25}
+            />
+            <FeatureCard
+              title="Equipe Certificada"
+              icon={Shield}
+              desc="Pilotos competentes e habilitados pela DECEA."
+              delay={0.3}
+            />
+            <FeatureCard
+              title="Cobertura Regional"
+              icon={MapPin}
+              desc="Atendimento em toda sua região, garantindo cobertura completa."
+              delay={0.35}
+            />
           </div>
         </Container>
       </section>
@@ -1880,7 +2299,8 @@ function OceanoAzulView({
                     solicitação e responderá em breve.
                   </p>
                   <button
-                    onClick={() => window.location.reload()}
+                    type="button"
+                    onClick={resetForm}
                     className="text-blue-600 font-bold hover:text-blue-700 hover:underline text-sm transition-colors"
                   >
                     Enviar outra mensagem
@@ -1903,12 +2323,7 @@ function OceanoAzulView({
                       placeholder="Seu nome"
                       className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all placeholder:text-slate-400"
                     />
-                    <ValidationError
-                      prefix="Nome"
-                      field="name"
-                      errors={state.errors}
-                      className="text-red-500 text-xs mt-1"
-                    />
+                    <FieldError message={state.errors.name} />
                   </div>
                   <div>
                     <label
@@ -1925,12 +2340,7 @@ function OceanoAzulView({
                       placeholder="seu@email.com"
                       className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all placeholder:text-slate-400"
                     />
-                    <ValidationError
-                      prefix="Email"
-                      field="email"
-                      errors={state.errors}
-                      className="text-red-500 text-xs mt-1"
-                    />
+                    <FieldError message={state.errors.email} />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
@@ -1989,13 +2399,12 @@ function OceanoAzulView({
                       placeholder="Conte-nos sobre sua necessidade..."
                       className="w-full px-4 py-3.5 rounded-xl border border-slate-200 text-sm bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 outline-none transition-all placeholder:text-slate-400 resize-none"
                     ></textarea>
-                    <ValidationError
-                      prefix="Mensagem"
-                      field="message"
-                      errors={state.errors}
-                      className="text-red-500 text-xs mt-1"
-                    />
+                    <FieldError message={state.errors.message} />
                   </div>
+                  <FieldError
+                    message={state.errors.form}
+                    className="text-red-500 text-sm"
+                  />
                   <button
                     type="submit"
                     disabled={state.submitting}
@@ -2045,10 +2454,12 @@ function OceanoAzulView({
                 className="relative w-auto h-16 mb-5 cursor-pointer"
                 onClick={onNavigateToSystem}
               >
-                <img
+                <Image
                   src="/images/oceano-azul-logo-sem-fundo.png"
                   alt="Oceano Azul"
-                  className="w-full h-full object-contain object-left"
+                  width={220}
+                  height={64}
+                  className="h-full w-auto object-contain object-left"
                 />
               </div>
               <p className="text-sm text-slate-400 mb-6 leading-relaxed max-w-sm">
@@ -2245,8 +2656,6 @@ export default function Page() {
                 onNavigateToSystem={() => setCurrentView("system")}
                 // Link 1: Vai para a Empresa (Institucional)
                 onNavigateToAboutOceano={() => setCurrentView("about_oceano")}
-                // Link 2: Vai para o Produto (IJA)
-                onNavigateToAboutIJA={() => setCurrentView("product_ija")}
               />
             </motion.div>
           ) : /* --- TELA 2: SISTEMA (IJA DRONES) --- */
@@ -2259,8 +2668,6 @@ export default function Page() {
             >
               <IjaDronesView
                 onBack={() => setCurrentView("home")}
-                // Ajustado para 'about_oceano' para bater com a Tela 3
-                onNavigateToAbout={() => setCurrentView("about_oceano")}
                 onNavigateToOceano={() => setCurrentView("home")}
               />
             </motion.div>

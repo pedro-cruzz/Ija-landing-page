@@ -1,36 +1,53 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Landing Page IJA / Oceano Azul
 
-## Getting Started
+Frontend em Next.js com formularios que enviam leads para a rota interna `POST /api/contact`.
 
-First, run the development server:
+## Variaveis de ambiente
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Copie `.env.local.example` para `.env.local`.
+
+```env
+SITE_URL=
+RESEND_API_KEY=
+RESEND_FROM_EMAIL=Sistema IJA <onboarding@resend.dev>
+IJA_DRONES_RECIPIENT=suporte@ijadrones.com.br
+OCEANO_AZUL_RECIPIENT=suporte@ijadrones.com.br
+DEFAULT_LEAD_RECIPIENT=suporte@ijadrones.com.br
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+`SITE_URL` e opcional, mas recomendado para os e-mails carregarem as logos publicas corretas de cada marca.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Regras de roteamento:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- `origem = "IJA Drones"` envia para `IJA_DRONES_RECIPIENT`
+- `origem = "Oceano Azul"` envia para `OCEANO_AZUL_RECIPIENT`
+- se nao houver destinatario especifico, usa `DEFAULT_LEAD_RECIPIENT`
 
-## Learn More
+## Instalacao
 
-To learn more about Next.js, take a look at the following resources:
+```powershell
+npm install
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## Executando localmente
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+```powershell
+npm run dev
+```
 
-## Deploy on Vercel
+Abra `http://localhost:3000`.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Fluxo do formulario
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. O usuario envia o formulario em uma das paginas.
+2. O frontend chama `POST /api/contact`.
+3. A rota do Next valida os campos obrigatorios.
+4. A rota envia o e-mail diretamente para a API do Resend.
+5. O lead chega no destinatario configurado por origem.
+
+## Arquivos principais
+
+- `app/page.tsx`: telas e formularios
+- `app/api/contact/route.ts`: validacao e envio do e-mail
+- `app/api/contact/email-template.ts`: template HTML/texto do lead
+- `.env.local.example`: exemplo de configuracao local
