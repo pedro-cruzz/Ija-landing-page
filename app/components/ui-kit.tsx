@@ -118,12 +118,16 @@ export function FeatureCard({
 }) {
   return (
     <Reveal delay={delay} className="h-full" width="100%">
-      <div className="group relative flex h-full flex-col overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:border-sky-200/50">
+      <div className="group relative flex h-full min-h-[19rem] flex-col overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-8 shadow-sm transition-all hover:shadow-xl hover:border-sky-200/50">
         <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 transition-colors group-hover:bg-sky-500 group-hover:text-white">
           <Icon size={24} />
         </div>
-        <h3 className="mb-3 text-xl font-bold text-slate-900">{title}</h3>
-        <p className="text-slate-600 leading-relaxed">{desc}</p>
+        <div className="flex flex-1 flex-col">
+          <h3 className="mb-3 min-h-[3.5rem] text-xl font-bold text-slate-900">
+            {title}
+          </h3>
+          <p className="text-slate-600 leading-relaxed">{desc}</p>
+        </div>
       </div>
     </Reveal>
   );

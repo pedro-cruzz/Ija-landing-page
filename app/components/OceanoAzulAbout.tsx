@@ -25,6 +25,16 @@ export default function OceanoAzulAboutView({
   onBack: () => void;
   onNavigateToSystem: () => void;
 }) {
+  const handleBudgetClick = () => {
+    onBack();
+
+    window.setTimeout(() => {
+      document
+        .getElementById("contato-oceano")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 50);
+  };
+
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -244,7 +254,10 @@ export default function OceanoAzulAboutView({
                   <div className="font-bold">+55 (16) 3947-4613</div>
                 </div>
               </div>
-              <button className="px-8 py-3 bg-white text-blue-700 rounded-xl font-bold hover:bg-blue-50 transition-colors">
+              <button
+                onClick={handleBudgetClick}
+                className="px-8 py-3 bg-white text-blue-700 rounded-xl font-bold hover:bg-blue-50 transition-colors"
+              >
                 Solicitar Orçamento
               </button>
             </div>

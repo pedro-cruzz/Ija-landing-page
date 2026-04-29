@@ -269,7 +269,7 @@ function IjaDronesView({
   const equipmentOverviewCards = [
     {
       title: "DRONES",
-      value: "0",
+      value: "5",
       action: "Ver frota completa",
       valueClass: "text-[#1f5087]",
       actionClass: "text-[#1f5087]",
@@ -279,7 +279,7 @@ function IjaDronesView({
     },
     {
       title: "BATERIAS",
-      value: "0",
+      value: "18",
       action: "Ver estoque total",
       valueClass: "text-[#1f5087]",
       actionClass: "text-[#f1cb00]",
@@ -289,7 +289,7 @@ function IjaDronesView({
     },
     {
       title: "EM MANUTENÇÃO",
-      value: "0",
+      value: "2",
       action: "Ver equipamentos parados",
       valueClass: "text-[#ef4444]",
       actionClass: "text-[#ef4444]",
@@ -299,32 +299,138 @@ function IjaDronesView({
     },
   ];
 
+  const equipmentInventoryRows = [
+    {
+      type: "Drone",
+      model: "DJI Agras T40",
+      serial: "T40-SP-2048",
+      status: "Operacional",
+      createdAt: "Hoje, 08:12",
+    },
+    {
+      type: "Drone",
+      model: "DJI Matrice 300 RTK",
+      serial: "M300-UVIS-1132",
+      status: "Checklist",
+      createdAt: "Hoje, 07:48",
+    },
+    {
+      type: "Bateria",
+      model: "DB1560 - Ciclo 128",
+      serial: "BAT-1560-128",
+      status: "Carregando",
+      createdAt: "Hoje, 07:25",
+    },
+    {
+      type: "Tanque",
+      model: "Pulverização 50L",
+      serial: "TNK-050-022",
+      status: "Calibração",
+      createdAt: "Ontem, 18:04",
+    },
+    {
+      type: "RTK",
+      model: "D-RTK 2 Mobile Station",
+      serial: "RTK-BASE-019",
+      status: "Manutenção",
+      createdAt: "Ontem, 16:41",
+    },
+  ];
+
+  const equipmentStatusClasses: Record<string, string> = {
+    Operacional: "bg-emerald-50 text-emerald-700 border-emerald-100",
+    Checklist: "bg-sky-50 text-sky-700 border-sky-100",
+    Carregando: "bg-amber-50 text-amber-700 border-amber-100",
+    Calibração: "bg-violet-50 text-violet-700 border-violet-100",
+    Manutenção: "bg-rose-50 text-rose-700 border-rose-100",
+  };
+
   const vehicleOverviewCards = [
     {
       title: "FROTA",
-      value: "0",
+      value: "5",
       valueClass: "text-[#1f5087]",
       accent: "border-l-[#1d6ff2]",
     },
     {
       title: "REVISÕES",
-      value: "0",
+      value: "1",
       valueClass: "text-[#f1cb00]",
       accent: "border-l-[#ffc107]",
     },
     {
       title: "ATRASADOS",
-      value: "0",
+      value: "1",
       valueClass: "text-[#ef4444]",
       accent: "border-l-[#e8344e]",
     },
     {
       title: "MARCADOS",
-      value: "0",
+      value: "2",
       valueClass: "text-[#1b8c5a]",
       accent: "border-l-[#178b59]",
     },
   ];
+
+  const vehicleFleetRows = [
+    {
+      vehicle: "Fiat Strada Volcano",
+      plate: "FZD-4B21",
+      operation: "UVIS Norte",
+      owner: "Carlos M.",
+      currentKm: "48.220 km",
+      remainingKm: "1.780 km",
+      lastMove: "Hoje, 08:30",
+      status: "Ativo",
+    },
+    {
+      vehicle: "Toyota Hilux SRX",
+      plate: "GHT-9C14",
+      operation: "Pulverização Agro",
+      owner: "André L.",
+      currentKm: "71.904 km",
+      remainingKm: "320 km",
+      lastMove: "Hoje, 06:55",
+      status: "Revisão agendada",
+    },
+    {
+      vehicle: "Renault Oroch Pro",
+      plate: "QPL-7D08",
+      operation: "Base Oeste",
+      owner: "Pedro H.",
+      currentKm: "39.110 km",
+      remainingKm: "2.430 km",
+      lastMove: "Ontem, 17:12",
+      status: "Checklist marcado",
+    },
+    {
+      vehicle: "Chevrolet S10 LT",
+      plate: "JKS-2E77",
+      operation: "UVIS Sul",
+      owner: "Juliana R.",
+      currentKm: "84.560 km",
+      remainingKm: "0 km",
+      lastMove: "Ontem, 14:08",
+      status: "Documento atrasado",
+    },
+    {
+      vehicle: "Ford Ranger XLS",
+      plate: "MNV-5H63",
+      operation: "Operação Campo",
+      owner: "Marcos T.",
+      currentKm: "56.340 km",
+      remainingKm: "4.260 km",
+      lastMove: "Ontem, 11:40",
+      status: "Ativo",
+    },
+  ];
+
+  const vehicleStatusClasses: Record<string, string> = {
+    Ativo: "bg-emerald-50 text-emerald-700 border-emerald-100",
+    "Revisão agendada": "bg-amber-50 text-amber-700 border-amber-100",
+    "Checklist marcado": "bg-sky-50 text-sky-700 border-sky-100",
+    "Documento atrasado": "bg-rose-50 text-rose-700 border-rose-100",
+  };
 
   const isAgroContext = profileContext === "agro";
   const currentSystemUrl = isAgroContext
@@ -855,7 +961,7 @@ function IjaDronesView({
                         activeTab={activeTab}
                         id="relatorios"
                         icon={FileDown}
-                        label="Relat�rios"
+                        label="Relatórios"
                         onSelect={setActiveTab}
                       />
                       <SidebarItem
@@ -883,7 +989,7 @@ function IjaDronesView({
                         activeTab={activeTab}
                         id="veiculos"
                         icon={Map}
-                        label="Ve�culos"
+                        label="Veículos"
                         onSelect={setActiveTab}
                       />
                     </>
@@ -2059,14 +2165,34 @@ function IjaDronesView({
                               </tr>
                             </thead>
                             <tbody className="bg-white">
-                              <tr>
-                                <td
-                                  colSpan={5}
-                                  className="px-4 py-7 text-center text-sm text-slate-400"
+                              {equipmentInventoryRows.map((item) => (
+                                <tr
+                                  key={item.serial}
+                                  className="border-t border-slate-100 hover:bg-slate-50"
                                 >
-                                  Nenhum equipamento cadastrado ainda.
-                                </td>
-                              </tr>
+                                  <td className="px-4 py-4 text-sm font-semibold text-slate-700">
+                                    {item.type}
+                                  </td>
+                                  <td className="px-4 py-4 text-sm text-slate-600">
+                                    {item.model}
+                                  </td>
+                                  <td className="px-4 py-4 text-sm text-slate-500">
+                                    {item.serial}
+                                  </td>
+                                  <td className="px-4 py-4">
+                                    <span
+                                      className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${
+                                        equipmentStatusClasses[item.status]
+                                      }`}
+                                    >
+                                      {item.status}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 py-4 text-sm text-slate-500">
+                                    {item.createdAt}
+                                  </td>
+                                </tr>
+                              ))}
                             </tbody>
                           </table>
                         </div>
@@ -2179,14 +2305,57 @@ function IjaDronesView({
                               </tr>
                             </thead>
                             <tbody className="bg-white">
-                              <tr>
-                                <td
-                                  colSpan={8}
-                                  className="px-4 py-8 text-center text-sm text-slate-400"
+                              {vehicleFleetRows.map((item) => (
+                                <tr
+                                  key={item.plate}
+                                  className="border-t border-slate-100 hover:bg-slate-50"
                                 >
-                                  Nenhum veículo cadastrado ainda.
-                                </td>
-                              </tr>
+                                  <td className="px-4 py-4">
+                                    <div className="font-semibold text-slate-700">
+                                      {item.vehicle}
+                                    </div>
+                                    <div className="text-xs text-slate-400">
+                                      {item.plate}
+                                    </div>
+                                  </td>
+                                  <td className="px-4 py-4 text-sm text-slate-600">
+                                    {item.operation}
+                                  </td>
+                                  <td className="px-4 py-4 text-sm text-slate-600">
+                                    {item.owner}
+                                  </td>
+                                  <td className="px-4 py-4 text-sm text-slate-600">
+                                    {item.currentKm}
+                                  </td>
+                                  <td className="px-4 py-4 text-sm text-slate-600">
+                                    {item.remainingKm}
+                                  </td>
+                                  <td className="px-4 py-4 text-sm text-slate-500">
+                                    {item.lastMove}
+                                  </td>
+                                  <td className="px-4 py-4">
+                                    <span
+                                      className={`inline-flex rounded-full border px-2.5 py-1 text-[10px] font-bold uppercase tracking-wide ${
+                                        vehicleStatusClasses[item.status]
+                                      }`}
+                                    >
+                                      {item.status}
+                                    </span>
+                                  </td>
+                                  <td className="px-4 py-4">
+                                    <div className="flex gap-2">
+                                      <button className="inline-flex items-center gap-1 rounded-lg bg-sky-50 px-3 py-1.5 text-[11px] font-bold text-sky-700">
+                                        <Edit size={12} />
+                                        Editar
+                                      </button>
+                                      <button className="inline-flex items-center gap-1 rounded-lg bg-slate-100 px-3 py-1.5 text-[11px] font-bold text-slate-600">
+                                        <FileDown size={12} />
+                                        Logs
+                                      </button>
+                                    </div>
+                                  </td>
+                                </tr>
+                              ))}
                             </tbody>
                           </table>
                         </div>
