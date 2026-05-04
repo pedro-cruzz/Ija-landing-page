@@ -13,7 +13,7 @@ type ResendSendEmailResponse = {
 };
 
 const RESEND_API_URL = "https://api.resend.com/emails";
-const DEFAULT_FROM = "Sistema IJA <onboarding@resend.dev>";
+const DEFAULT_FROM = "Oceano Azul <onboarding@resend.dev>";
 const DEFAULT_SITE_ORIGIN = "Site institucional";
 
 function normalizeValue(value: unknown) {
@@ -38,7 +38,6 @@ function resolveRequestBaseUrl(request: Request) {
 
 function resolveRecipient(origin: string) {
   const formRecipients: Record<string, string> = {
-    "IJA Drones": getEnvValue("IJA_DRONES_RECIPIENT") || "suporte@ijadrones.com.br",
     "Oceano Azul": getEnvValue("OCEANO_AZUL_RECIPIENT"),
   };
 

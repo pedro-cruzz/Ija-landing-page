@@ -1,1 +1,5 @@
-export { default } from "./components/LandingPageClient";
+import { redirect } from "next/navigation";
+
+export default function Page() {
+  redirect("/oceano");
+}

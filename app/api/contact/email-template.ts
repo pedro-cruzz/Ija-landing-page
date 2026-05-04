@@ -81,35 +81,7 @@ function resolveLogoUrl(logoPath: string, publicBaseUrl?: string) {
   return `${resolvedBaseUrl}${logoPath}`;
 }
 
-function getBrandTheme(origin: string): BrandTheme {
-  if (origin === "IJA Drones") {
-    return {
-      name: "IJA Drones",
-      logoAlt: "IJA Drones",
-      logoPath: "/images/logo-ija-sem-fundo.png",
-      greeting: "Ola, Equipe IJA Drones!",
-      introTitle: "Novo lead para o IJA System",
-      introBody:
-        "Um novo contato demonstrou interesse na plataforma IJA System. Veja abaixo os dados recebidos e avance com o atendimento.",
-      eyebrow: "NOTIFICACAO DE NOVO LEAD",
-      accentColor: "#0284c7",
-      accentSoftColor: "#e0f2fe",
-      pageBackground: "#eaf4fb",
-      panelBackground: "#f7fbff",
-      panelBorder: "#d7e9f7",
-      textPrimary: "#0f172a",
-      textMuted: "#475569",
-      heroTextColor: "#e0f2fe",
-      heroBackground: "#0f172a",
-      heroBorder: "#1e293b",
-      footerText: "IJA Drones | Software e gestao para operacoes com drones.",
-      contacts: [
-        { label: "E-mail da equipe", value: "suporte@ijadrones.com.br" },
-        { label: "Suporte comercial", value: "+55 (35) 99239-4222" },
-      ],
-    };
-  }
-
+function getBrandTheme(): BrandTheme {
   return {
     name: "Oceano Azul",
     logoAlt: "Oceano Azul",
@@ -174,7 +146,7 @@ export function buildLeadEmailHtml(
 ) {
   const phone = formatOptionalValue(lead.telefone);
   const interest = formatOptionalValue(lead.interesse);
-  const brand = getBrandTheme(lead.origem);
+  const brand = getBrandTheme();
   const logoUrl = resolveLogoUrl(brand.logoPath, options.publicBaseUrl);
   const logoMarkup = logoUrl
     ? `<img
@@ -301,7 +273,7 @@ export function buildLeadEmailHtml(
 }
 
 export function buildLeadEmailText(lead: ContactLead) {
-  const brand = getBrandTheme(lead.origem);
+  const brand = getBrandTheme();
   const contactText = brand.contacts
     .map((contact) => `${contact.label}: ${contact.value}`)
     .join("\n");
