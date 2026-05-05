@@ -109,7 +109,7 @@ export default function OceanoLandingPage({
       description:
         "Ações rápidas com pulverização urbana direcionada e captação de pontos de foco do Aedes aegypti.",
       highlights: [
-        "Aplicação local sem risco de amassamento",
+        "Aplicação precisa em locais de difícil acesso",
         "Integração com programas de saúde pública",
         "Cobertura eficiente em perímetros urbanos",
       ],
@@ -571,13 +571,19 @@ export default function OceanoLandingPage({
                 </p>
               </Reveal>
               <Reveal delay={0.3}>
-                <div className="flex flex-col sm:flex-row gap-3 justify-center lg:justify-start">
-                  <a href="#contato-oceano">
+                <div className="flex flex-col sm:flex-row items-center gap-3 justify-center">
+                  <a
+                    href="#contato-oceano"
+                    className="w-full max-w-[17rem] sm:w-auto sm:max-w-none"
+                  >
                     <button className="w-full sm:w-auto px-8 py-3.5 bg-blue-600 text-white rounded-full font-bold shadow-lg shadow-blue-600/25 hover:bg-blue-700 transition-all flex items-center justify-center gap-2">
                       Solicitar Orçamento <ArrowRight size={16} />
                     </button>
                   </a>
-                  <a href="#servicos">
+                  <a
+                    href="#servicos"
+                    className="w-full max-w-[17rem] sm:w-auto sm:max-w-none"
+                  >
                     <button className="w-full sm:w-auto px-8 py-3.5 bg-white text-slate-700 border border-slate-200 rounded-full font-bold hover:bg-slate-50 hover:border-slate-300 transition-all">
                       Conhecer Soluções
                     </button>
