@@ -143,7 +143,7 @@ export default function OceanoAboutPage({
                     Itajubá
                   </div>
                   <div className="text-xs font-bold text-slate-500 uppercase">
-                    Base de P&D em MG
+                    Base de PDI em MG
                   </div>
                 </div>
               </div>
@@ -283,8 +283,8 @@ export default function OceanoAboutPage({
               <AnimatedImageFrame className="aspect-square bg-slate-100 rounded-2xl">
                 <div className="relative h-full w-full">
                   <Image
-                    src="/images/geoprocessamento.jpeg"
-                    alt="Geoprocessamento e análise aérea com drones"
+                    src="/images/pulverizacao_dengue.png"
+                    alt="Pulverização contra o mosquito da dengue"
                     fill
                     className="object-cover"
                   />

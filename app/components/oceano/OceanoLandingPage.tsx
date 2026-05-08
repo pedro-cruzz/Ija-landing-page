@@ -71,11 +71,11 @@ export default function OceanoLandingPage({
       area: "Operação agrícola",
       image: "/images/aplicacao_biologicos.jpeg",
       description:
-        "Entrega controlada de defensivos biológicos, sementes e sólidos com tecnologia drone-friendly.",
+        "Entrega controlada de defensivos biológicos, sementes e sólidos com com alta precisão.",
       highlights: [
         "Distribuição homogênea em superfícies críticas",
         "Operação segura e rastreável",
-        "Alta precisão por pixel",
+        "Compatibilidade com diversos produtos",
       ],
     },
     {
@@ -93,7 +93,7 @@ export default function OceanoLandingPage({
     {
       title: "Relatórios Técnicos e Suporte à Decisão",
       area: "Análise técnica",
-      image: "/images/equipe-bg.png",
+      image: "/images/relatorio.jpeg",
       description:
         "Análises detalhadas e relatórios estratégicos para orientar investimentos e ações no campo e na cidade.",
       highlights: [
@@ -129,9 +129,9 @@ export default function OceanoLandingPage({
     {
       title: "Manejo Inteligente de Vegetação — MIV",
       area: "Vegetação",
-      image: "/images/gestao_vegetativa.jpeg",
+      image: "/images/gestao_vegetativa_MIV.png",
       description:
-        "Gestão de vegetação com imagens e análises que permitem decisões de manejo mais inteligentes.",
+        "Gestão vegetativa através do controle seletivo de vegetação, com economia na manutenção.",
       highlights: [
         "Avaliação da saúde vegetal",
         "Planejamento de corte e conservação",
@@ -198,7 +198,7 @@ export default function OceanoLandingPage({
   const technicalSheet = [
     {
       label: "Empresa",
-      value: "Oceano Azul Drones",
+      value: "Oceano Azul Comércio Internacional LTDA",
       detail: "Operações técnicas com drones para campo, cidade e infraestrutura.",
       icon: Building2,
     },
@@ -209,7 +209,7 @@ export default function OceanoLandingPage({
       icon: MapPin,
     },
     {
-      label: "Base de P&D",
+      label: "Base de PDI",
       value: "Itajubá, MG",
       detail: "Pesquisa aplicada, testes de equipamentos e melhoria de processos.",
       icon: Microscope,
@@ -254,21 +254,21 @@ export default function OceanoLandingPage({
       icon: Leaf,
     },
     {
-      value: "1.000+",
+      value: "1.500+",
       label: "hectares em dengue",
       description:
         "Área coberta em ações urbanas de apoio ao combate e monitoramento da dengue.",
       icon: Shield,
     },
     {
-      value: "20.000+",
+      value: "50.000+",
       label: "voos urbanos",
       description:
         "Missões realizadas em ambientes urbanos para mapeamento, monitoramento e suporte técnico.",
       icon: Building2,
     },
     {
-      value: "multiestado",
+      value: "Nacional",
       label: "atuação territorial",
       description:
         "Projetos realizados em diversos estados e municípios, com adaptação ao contexto de cada operação.",
@@ -337,7 +337,7 @@ export default function OceanoLandingPage({
       icon: Building2,
     },
     {
-      title: "Equipamentos DJI",
+      title: "Equipamentos de última geração",
       description:
         "Frota com equipamentos reconhecidos pelo mercado, preparada para precisão, estabilidade e produtividade.",
       icon: Bot,
@@ -635,8 +635,8 @@ export default function OceanoLandingPage({
               >
                 <div className="relative w-80 h-80">
                   <div
-                    className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 bg-gradient-to-b from-blue-500 to-blue-700 rounded-3xl shadow-lg shadow-blue-500/50 z-20 flex items-center justify-center border border-blue-400/50 transition-all duration-500 ${
-                      isHovering ? "brightness-110" : "brightness-75 grayscale"
+                    className={`absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[8.5rem] bg-white/95 rounded-3xl shadow-lg shadow-blue-500/30 z-20 flex items-center justify-center border border-blue-100 transition-all duration-500 ${
+                      isHovering ? "brightness-110" : "brightness-95"
                     }`}
                   >
                     <motion.div
@@ -648,10 +648,13 @@ export default function OceanoLandingPage({
                       transition={{ duration: 1.5, repeat: Infinity }}
                       className="w-12 h-12 bg-blue-300 rounded-full blur-md absolute"
                     ></motion.div>
-                    <Bot
-                      size={64}
-                      className="text-white drop-shadow-lg relative z-10"
-                      strokeWidth={1.5}
+                    <Image
+                      src="/images/oceano-azul-logo-sem-fundo.png"
+                      alt="Oceano Azul"
+                      width={112}
+                      height={84}
+                      className="relative z-10 h-auto w-28 drop-shadow-sm"
+                      priority
                     />
                   </div>
                   <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 border-2 border-blue-200/30 rounded-full z-10"></div>
@@ -1237,7 +1240,7 @@ export default function OceanoLandingPage({
             <FeatureCard
               title="Equipe Certificada"
               icon={Shield}
-              desc="Pilotos competentes e habilitados pela DECEA."
+              desc="Pilotos competentes e certificados pelo DECEA e outras Entidades."
               delay={0.3}
             />
             <FeatureCard
