@@ -9,8 +9,6 @@ import {
   Zap,
   Map,
   Leaf,
-  MapPin,
-  Bot,
   CheckCircle2,
   Phone,
 } from "lucide-react";
@@ -152,9 +150,12 @@ export default function OceanoAboutPage({
             </Reveal>
             <div className="relative h-[500px]">
               <AnimatedImageFrame className="h-full shadow-2xl bg-slate-200">
-                <div className="w-full h-full bg-gradient-to-br from-blue-900 to-slate-900 flex items-center justify-center text-white/20">
-                  <Users size={64} />
-                </div>
+                <Image
+                  src="/images/drones_empresa.jpeg"
+                  alt="Drones da Oceano Azul"
+                  fill
+                  className="object-cover"
+                />
               </AnimatedImageFrame>
             </div>
           </div>
@@ -280,13 +281,23 @@ export default function OceanoAboutPage({
             </div>
             <div className="grid grid-cols-2 gap-4">
               <AnimatedImageFrame className="aspect-square bg-slate-100 rounded-2xl">
-                <div className="w-full h-full flex items-center justify-center text-slate-300">
-                  <MapPin size={32} />
+                <div className="relative h-full w-full">
+                  <Image
+                    src="/images/geoprocessamento.jpeg"
+                    alt="Geoprocessamento e análise aérea com drones"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               </AnimatedImageFrame>
               <AnimatedImageFrame className="aspect-square bg-slate-100 rounded-2xl mt-8">
-                <div className="w-full h-full flex items-center justify-center text-slate-300">
-                  <Bot size={32} />
+                <div className="relative h-full w-full">
+                  <Image
+                    src="/images/pulverizacao_agricola.jpeg"
+                    alt="Operação agrícola com drone em campo"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               </AnimatedImageFrame>
             </div>

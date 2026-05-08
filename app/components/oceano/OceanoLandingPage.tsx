@@ -57,7 +57,7 @@ export default function OceanoLandingPage({
     {
       title: "Pulverização Agrícola com Drones",
       area: "Agricultura",
-      image: "/images/drone-agro.png",
+      image: "/images/pulverizacao_agricola.jpeg",
       description:
         "Aplicações precisas para nutrição e proteção de culturas, com maior uniformidade e menor uso de insumos.",
       highlights: [
@@ -69,7 +69,7 @@ export default function OceanoLandingPage({
     {
       title: "Aplicação de Biológicos, Sólidos e Sementes",
       area: "Operação agrícola",
-      image: "/images/drone-agro.png",
+      image: "/images/aplicacao_biologicos.jpeg",
       description:
         "Entrega controlada de defensivos biológicos, sementes e sólidos com tecnologia drone-friendly.",
       highlights: [
@@ -81,7 +81,7 @@ export default function OceanoLandingPage({
     {
       title: "Geoprocessamento e Mapeamento Aéreo",
       area: "Inteligência territorial",
-      image: "/images/equipe-bg.png",
+      image: "/images/geoprocessamento.jpeg",
       description:
         "Levantamentos aéreos que geram mapas úteis para tomada de decisão e análise de desempenho.",
       highlights: [
@@ -105,7 +105,7 @@ export default function OceanoLandingPage({
     {
       title: "Combate à Dengue com Drones",
       area: "Saúde pública",
-      image: "/images/drone-dengue.png",
+      image: "/images/pulverizacao_dengue.png",
       description:
         "Ações rápidas com pulverização urbana direcionada e captação de pontos de foco do Aedes aegypti.",
       highlights: [
@@ -117,7 +117,7 @@ export default function OceanoLandingPage({
     {
       title: "Monitoramento para Auxílio no Combate à Dengue",
       area: "Vigilância sanitária",
-      image: "/images/drone-dengue.png",
+      image: "/images/monitoramento_dengue.jpeg",
       description:
         "Monitoramento aéreo dedicado para identificar áreas de risco e apoiar ações preventivas.",
       highlights: [
@@ -129,7 +129,7 @@ export default function OceanoLandingPage({
     {
       title: "Manejo Inteligente de Vegetação — MIV",
       area: "Vegetação",
-      image: "/images/drone-agro.png",
+      image: "/images/gestao_vegetativa.jpeg",
       description:
         "Gestão de vegetação com imagens e análises que permitem decisões de manejo mais inteligentes.",
       highlights: [
@@ -141,7 +141,7 @@ export default function OceanoLandingPage({
     {
       title: "Inspeção de Torres e Ativos de Energia",
       area: "Energia",
-      image: "/images/equipe-bg.png",
+      image: "/images/inspecao_torres.jpeg",
       description:
         "Inspeções aéreas de alta segurança para torres, linhas de transmissão e ativos críticos.",
       highlights: [
@@ -153,7 +153,7 @@ export default function OceanoLandingPage({
     {
       title: "Georreferenciamento Urbano",
       area: "Cidades",
-      image: "/images/equipe-bg.png",
+      image: "/images/georreferenciamento.jpeg",
       description:
         "Serviços de posicionamento preciso para projetos urbanos, topografia e obras civis.",
       highlights: [
@@ -165,7 +165,7 @@ export default function OceanoLandingPage({
     {
       title: "Monitoramento de Eventos e Segurança Pública",
       area: "Segurança",
-      image: "/images/drone-dengue.png",
+      image: "/images/monitoramento_festas.jpeg",
       description:
         "Soluções de vigilância aérea para apoiar a gestão de grandes eventos e operações de segurança.",
       highlights: [
@@ -177,7 +177,7 @@ export default function OceanoLandingPage({
     {
       title: "Limpeza de Placas Solares com Drones",
       area: "Energia solar",
-      image: "/images/drone-agro.png",
+      image: "/images/limpeza_placas.jpeg",
       description:
         "Manutenção aérea eficiente para aumentar a performance de usinas solares sem riscos à estrutura.",
       highlights: [
@@ -366,7 +366,7 @@ export default function OceanoLandingPage({
         "Cuidados básicos com equipamento, bateria e missão",
       ],
       icon: GraduationCap,
-      image: "",
+      image: "/images/curso_piloto.jpeg",
     },
   ];
   const footerServices = [
@@ -1119,12 +1119,15 @@ export default function OceanoLandingPage({
                 <article className="group grid overflow-hidden rounded-3xl border border-slate-200/60 bg-white shadow-sm transition-all hover:border-sky-200/50 hover:shadow-xl lg:grid-cols-[1.05fr_0.95fr]">
                   <div className="relative min-h-[18rem] overflow-hidden bg-sky-50 lg:min-h-[30rem]">
                     {course.image ? (
-                      <Image
-                        src={course.image}
-                        alt={course.title}
-                        fill
-                        className="object-cover transition duration-500 group-hover:scale-105"
-                      />
+                      <div className="flex h-full items-center justify-center p-4">
+                        <Image
+                          src={course.image}
+                          alt={course.title}
+                          width={1066}
+                          height={1424}
+                          className="h-full w-auto max-w-full rounded-[1.5rem] object-contain shadow-sm"
+                        />
+                      </div>
                     ) : (
                       <div className="flex h-full items-center justify-center bg-[radial-gradient(circle_at_30%_20%,#dbeafe_0%,transparent_34%),linear-gradient(135deg,#eff6ff_0%,#ffffff_100%)] p-8">
                         <div className="flex aspect-square w-full max-w-[19rem] items-center justify-center rounded-[2rem] border border-white bg-white/80 text-sky-600 shadow-sm backdrop-blur">
@@ -1643,5 +1646,3 @@ export default function OceanoLandingPage({
 // ==============================================================================
 // 4. COMPONENTE PRINCIPAL (CONTROLADOR ATUALIZADO)
 // ==============================================================================
-
-
