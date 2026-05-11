@@ -31,7 +31,6 @@ import {
   DollarSign,
   CheckCircle2,
   Wrench,
-  PlayCircle,
 } from "lucide-react";
 
 import { FieldError, useLeadForm } from "../shared/lead-form";
@@ -95,12 +94,12 @@ const partnerBrands = [
 
 function HeroVideo() {
   return (
-    <div className="relative mx-auto w-full max-w-[34rem] lg:mx-0 lg:ml-auto">
+    <div className="relative mx-auto w-full max-w-[min(24rem,38svh)] sm:max-w-[min(28rem,42svh)] lg:mx-0 lg:ml-auto">
       <div className="absolute -inset-6 -z-10 rounded-[3rem] bg-blue-200/40 blur-3xl" />
       <div className="relative overflow-hidden rounded-[2rem] border border-blue-100 bg-slate-950 shadow-2xl shadow-blue-950/20">
         <video
-          className="aspect-[9/12] w-full object-cover sm:aspect-[4/5] lg:aspect-[5/6]"
-          src="/videos/oceano-hero.mp4"
+          className="aspect-[9/16] w-full object-contain"
+          src="/videos/empresa-profissional-de-drones.mp4"
           poster="/images/drones_empresa.jpeg"
           autoPlay
           muted
@@ -108,30 +107,6 @@ function HeroVideo() {
           playsInline
           preload="metadata"
         />
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-blue-700/25 via-slate-950/5 to-slate-950/35" />
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 h-40 bg-gradient-to-t from-slate-950/70 to-transparent" />
-        <div className="absolute bottom-5 left-5 right-5 flex items-end justify-between gap-4">
-          <div>
-            <div className="text-[0.65rem] font-bold uppercase tracking-wide text-blue-100">
-              Operação em campo
-            </div>
-            <div className="mt-1 max-w-[14rem] text-lg font-extrabold leading-tight text-white">
-              Drones aplicados a missões reais
-            </div>
-          </div>
-          <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-white/60 bg-white/90 text-blue-700 shadow-lg backdrop-blur">
-            <PlayCircle size={22} />
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute -bottom-5 right-5 z-30 rounded-2xl border border-blue-100 bg-white px-4 py-3 shadow-xl shadow-blue-950/10">
-        <div className="text-[0.65rem] font-bold uppercase tracking-wide text-blue-600">
-          Vídeo institucional
-        </div>
-        <div className="text-sm font-extrabold text-slate-900">
-          Oceano Azul
-        </div>
       </div>
     </div>
   );
@@ -357,7 +332,7 @@ function ImpactMetricCard({
 }) {
   return (
     <Reveal delay={index * 0.06} width="100%" className="h-full">
-      <article className="group relative isolate flex h-full min-h-[18rem] flex-col overflow-hidden rounded-3xl border border-blue-100 bg-white p-6 text-slate-900 shadow-sm shadow-blue-950/5 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-950/10 md:p-7">
+      <article className="group relative isolate flex h-full min-h-[16rem] flex-col overflow-hidden rounded-3xl border border-blue-100 bg-white p-6 text-slate-900 shadow-sm shadow-blue-950/5 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-950/10 md:p-7">
         <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.10),transparent_42%)] opacity-80" />
         <div className="mb-7 flex items-center justify-between">
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
@@ -376,7 +351,7 @@ function ImpactMetricCard({
         <span className="mt-3 text-sm font-extrabold uppercase tracking-[0.16em] text-blue-600">
           {item.label}
         </span>
-        <p className="mt-auto pt-8 text-sm leading-relaxed text-slate-600">
+        <p className="mt-8 text-sm leading-relaxed text-slate-600">
           {item.description}
         </p>
       </article>
@@ -395,7 +370,7 @@ function TerritorialImpactCard({
 }) {
   return (
     <Reveal delay={0.18} width="100%" className="h-full">
-      <article className="relative isolate flex h-full min-h-[32rem] flex-col overflow-hidden rounded-[2rem] border border-blue-100 bg-white p-7 text-slate-900 shadow-xl shadow-blue-950/10 md:p-8">
+      <article className="relative isolate flex h-full min-h-[27rem] flex-col overflow-hidden rounded-[2rem] border border-blue-100 bg-white p-7 text-slate-900 shadow-xl shadow-blue-950/10 md:p-8">
         <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_25%_18%,rgba(37,99,235,0.13),transparent_30%),linear-gradient(180deg,#ffffff_0%,#eef6ff_100%)]" />
         <div className="mb-6 flex items-center justify-between gap-4">
           <div>
@@ -413,7 +388,7 @@ function TerritorialImpactCard({
 
         <BrazilMapGraphic />
 
-        <p className="mt-auto pt-6 text-sm leading-relaxed text-slate-600">
+        <p className="mt-6 text-sm leading-relaxed text-slate-600">
           {item.description}
         </p>
         <div className="mt-5 flex flex-wrap gap-2">
@@ -975,6 +950,51 @@ export default function OceanoLandingPage({
         </Container>
       </section>
 
+      {/* CASES E NÚMEROS */}
+      <section
+        id="cases-numeros"
+        className="py-20 border-t border-blue-100/70 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.10),transparent_30%),linear-gradient(180deg,#f8fbff_0%,#eef6ff_100%)]"
+      >
+        <Container>
+          <div className="mx-auto mb-14 flex max-w-4xl flex-col items-center text-center">
+            <Reveal width="100%">
+              <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600">
+                <TrendingUp size={12} /> Cases e números
+              </span>
+            </Reveal>
+            <Reveal delay={0.1} width="100%">
+              <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
+                Experiência operacional <br />
+                <span className="text-blue-600">em campo e na cidade</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-600">
+                Números que refletem a atuação da Oceano Azul em projetos
+                agrícolas, urbanos, institucionais e técnicos em diferentes
+                regiões.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="grid gap-5 lg:grid-cols-[1.45fr_0.9fr] lg:items-stretch">
+            <div className="grid gap-5 md:grid-cols-3">
+              {operationalNumbers.map((item, index) => (
+                <ImpactMetricCard
+                  key={item.label}
+                  item={item}
+                  index={index}
+                />
+              ))}
+            </div>
+
+            {territorialNumber ? (
+              <TerritorialImpactCard item={territorialNumber} />
+            ) : null}
+          </div>
+        </Container>
+      </section>
+
       <PartnerLogoCarousel />
 
       {/* NOSSAS SOLUÇÕES */}
@@ -1061,7 +1081,7 @@ export default function OceanoLandingPage({
         className="bg-white py-20 border-t border-slate-200/70"
       >
         <Container>
-          <div className="mx-auto mb-14 flex max-w-4xl flex-col items-center text-center">
+          <div className="mx-auto mb-8 flex max-w-4xl flex-col items-center text-center">
             <Reveal width="100%">
               <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600">
                 <Shield size={12} /> Ficha Técnica
@@ -1182,51 +1202,6 @@ export default function OceanoLandingPage({
               ))}
               </div>
             </div>
-          </div>
-        </Container>
-      </section>
-
-      {/* CASES E NÚMEROS */}
-      <section
-        id="cases-numeros"
-        className="py-20 border-t border-blue-100/70 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.10),transparent_30%),linear-gradient(180deg,#f8fbff_0%,#eef6ff_100%)]"
-      >
-        <Container>
-          <div className="mx-auto mb-14 flex max-w-4xl flex-col items-center text-center">
-            <Reveal width="100%">
-              <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600">
-                <TrendingUp size={12} /> Cases e números
-              </span>
-            </Reveal>
-            <Reveal delay={0.1} width="100%">
-              <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
-                Experiência operacional <br />
-                <span className="text-blue-600">em campo e na cidade</span>
-              </h2>
-            </Reveal>
-            <Reveal delay={0.2}>
-              <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-600">
-                Números que refletem a atuação da Oceano Azul em projetos
-                agrícolas, urbanos, institucionais e técnicos em diferentes
-                regiões.
-              </p>
-            </Reveal>
-          </div>
-
-          <div className="grid gap-5 lg:grid-cols-[1.45fr_0.9fr] lg:items-stretch">
-            <div className="grid gap-5 md:grid-cols-3">
-              {operationalNumbers.map((item, index) => (
-                <ImpactMetricCard
-                  key={item.label}
-                  item={item}
-                  index={index}
-                />
-              ))}
-            </div>
-
-            {territorialNumber ? (
-              <TerritorialImpactCard item={territorialNumber} />
-            ) : null}
           </div>
         </Container>
       </section>
