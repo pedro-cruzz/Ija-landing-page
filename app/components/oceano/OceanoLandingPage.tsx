@@ -5,6 +5,7 @@ import Image from "next/image";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
+  ArrowUpRight,
   Building2,
   CalendarDays,
   GraduationCap,
@@ -39,6 +40,58 @@ import {
   Container,
   FeatureCard,
 } from "../ui-kit";
+
+const partnerBrands = [
+  { name: "Agrovale", image: "/images/marcas/agrovale.png" },
+  { name: "Associcana", image: "/images/marcas/associcana.png" },
+  { name: "Atvos", image: "/images/marcas/atvos.png" },
+  { name: "Bayer", image: "/images/marcas/bayer.png" },
+  { name: "COFCO International", image: "/images/marcas/cofco_intl.png" },
+  { name: "Coplacana", image: "/images/marcas/coplacana.png" },
+  { name: "Coplana", image: "/images/marcas/coplana.png" },
+  { name: "Duratex", image: "/images/marcas/duratex.png" },
+  { name: "Embrapa", image: "/images/marcas/embrapa.png" },
+  { name: "Enel", image: "/images/marcas/enel.png" },
+  { name: "Fundecitrus", image: "/images/marcas/fundecitrus.png" },
+  { name: "Grupo Viralcool", image: "/images/marcas/grupo_viralcohol.png" },
+  {
+    name: "Oxiquímica Agrociencia",
+    image: "/images/marcas/oxiquimica_agrociencia.png",
+  },
+  {
+    name: "Prefeitura de Jaboticabal",
+    image: "/images/marcas/prefeitura_jaboticabal.png",
+  },
+  {
+    name: "Prefeitura de São Paulo",
+    image: "/images/marcas/prefeitura_sao_paulo.png",
+  },
+  {
+    name: "Prefeitura de São Roque",
+    image: "/images/marcas/prefeitura_sao_roque.png",
+  },
+  {
+    name: "Prefeitura de Sertãozinho",
+    image: "/images/marcas/prefeitura_sertaozinho.png",
+  },
+  { name: "Raízen", image: "/images/marcas/raizen.png" },
+  { name: "Rumo", image: "/images/marcas/rumo.png" },
+  {
+    name: "Santa Luiza Agropecuária",
+    image: "/images/marcas/santa_luiza_agropecuaria.png",
+  },
+  { name: "São Martinho", image: "/images/marcas/sao_martinho.png" },
+  { name: "Suzano", image: "/images/marcas/suzano.png" },
+  { name: "Syngenta", image: "/images/marcas/syngenta.png" },
+  { name: "Umoe Bioenergy", image: "/images/marcas/umoe_bioenergy.png" },
+  { name: "Usina Batatais", image: "/images/marcas/usina_batatais.png" },
+  { name: "Usina Itajobi", image: "/images/marcas/usina_itajobi.png" },
+  {
+    name: "Usina Santa Clotilde",
+    image: "/images/marcas/usina_santa_clotilde.png",
+  },
+  { name: "Vale", image: "/images/marcas/vale.png" },
+];
 
 function HeroVideo() {
   return (
@@ -81,6 +134,56 @@ function HeroVideo() {
         </div>
       </div>
     </div>
+  );
+}
+
+function PartnerLogoCarousel() {
+  return (
+    <section className="border-y border-slate-200/70 bg-white py-14">
+      <Container>
+        <div className="mb-8 flex flex-col items-center gap-3 text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-4 py-2 text-xs font-extrabold uppercase tracking-[0.14em] text-blue-600 shadow-sm shadow-blue-100/60">
+            <Zap size={14} className="fill-blue-100" />
+            Marcas parceiras
+          </span>
+          <h2 className="text-2xl font-extrabold tracking-tight text-slate-900 md:text-3xl">
+            Empresas e instituições que caminham com a Oceano Azul
+          </h2>
+        </div>
+      </Container>
+
+      <div className="logo-marquee relative overflow-hidden">
+        <div className="pointer-events-none absolute inset-y-0 left-0 z-10 w-20 bg-gradient-to-r from-white to-transparent md:w-32" />
+        <div className="pointer-events-none absolute inset-y-0 right-0 z-10 w-20 bg-gradient-to-l from-white to-transparent md:w-32" />
+
+        <div className="logo-marquee-track flex w-max items-center gap-12 px-6">
+          {[partnerBrands, partnerBrands].map((brandGroup, groupIndex) => (
+            <div
+              key={groupIndex}
+              className={`flex items-center gap-12 ${
+                groupIndex === 1 ? "logo-marquee-copy" : ""
+              }`}
+              aria-hidden={groupIndex === 1}
+            >
+              {brandGroup.map((brand) => (
+                <div
+                  key={`${brand.name}-${groupIndex}`}
+                  className="flex h-28 w-56 shrink-0 items-center justify-center rounded-lg px-4 py-4 transition duration-300 hover:bg-slate-50 md:h-32 md:w-64 lg:h-36 lg:w-72"
+                >
+                  <Image
+                    src={brand.image}
+                    alt={brand.name}
+                    width={280}
+                    height={140}
+                    className="max-h-24 w-auto max-w-full scale-110 object-contain opacity-70 grayscale transition duration-300 hover:scale-125 hover:opacity-100 hover:grayscale-0 md:max-h-28 lg:max-h-32"
+                  />
+                </div>
+              ))}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 }
 
@@ -150,6 +253,71 @@ function AnimatedCaseValue({
     >
       {countTo === undefined ? value : displayValue}
     </span>
+  );
+}
+
+function ServiceCard({
+  service,
+  index,
+}: {
+  service: {
+    title: string;
+    area: string;
+    image: string;
+    description: string;
+    highlights: string[];
+  };
+  index: number;
+}) {
+  return (
+    <article className="group relative isolate flex h-full min-h-[34rem] flex-col overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-sm shadow-blue-950/5 transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-950/15">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.14),transparent_36%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+      <div className="relative h-60 overflow-hidden bg-slate-900">
+        <Image
+          src={service.image}
+          alt={service.title}
+          fill
+          sizes="(min-width: 1024px) 33vw, 100vw"
+          className="object-cover transition duration-700 group-hover:scale-110"
+        />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-blue-950/10 transition-opacity duration-500 group-hover:opacity-90" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-600/25 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+
+        <span className="absolute left-4 top-4 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-extrabold text-white shadow-sm backdrop-blur">
+          0{index + 1}
+        </span>
+        <span className="absolute bottom-4 left-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-700 shadow-sm transition-transform duration-500 group-hover:-translate-y-1">
+          {service.area}
+        </span>
+        <div className="absolute bottom-4 right-4 flex h-10 w-10 translate-y-3 items-center justify-center rounded-full bg-blue-600 text-white opacity-0 shadow-lg shadow-blue-950/20 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
+          <ArrowUpRight size={18} />
+        </div>
+      </div>
+
+      <div className="flex flex-1 flex-col p-6">
+        <h3 className="mb-3 text-xl font-extrabold leading-tight text-slate-900 transition-colors duration-300 group-hover:text-blue-700">
+          {service.title}
+        </h3>
+        <p className="mb-5 text-sm leading-relaxed text-slate-600">
+          {service.description}
+        </p>
+        <ul className="mt-auto space-y-3 border-t border-slate-100 pt-5">
+          {service.highlights.map((highlight) => (
+            <li
+              key={highlight}
+              className="flex items-start gap-3 text-sm text-slate-600"
+            >
+              <CheckCircle2
+                size={16}
+                className="mt-1 shrink-0 text-blue-600 transition-transform duration-300 group-hover:scale-110"
+              />
+              <span>{highlight}</span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </article>
   );
 }
 
@@ -695,6 +863,8 @@ export default function OceanoLandingPage({
         </Container>
       </section>
 
+      <PartnerLogoCarousel />
+
       {/* NOSSAS SOLUÇÕES */}
       <section
         id="servicos"
@@ -730,44 +900,7 @@ export default function OceanoLandingPage({
                 width="100%"
                 className="h-full"
               >
-                <article className="group flex h-full min-h-[34rem] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl">
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={service.image}
-                      alt={service.title}
-                      fill
-                      sizes="(min-width: 1024px) 33vw, 100vw"
-                      className="object-cover transition duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-slate-950/10 to-transparent" />
-                    <span className="absolute bottom-4 left-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-700 shadow-sm">
-                      {service.area}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-6">
-                    <h3 className="mb-3 text-xl font-extrabold leading-tight text-slate-900">
-                      {service.title}
-                    </h3>
-                    <p className="mb-5 text-sm leading-relaxed text-slate-600">
-                      {service.description}
-                    </p>
-                    <ul className="mt-auto space-y-3 border-t border-slate-100 pt-5">
-                      {service.highlights.map((highlight) => (
-                        <li
-                          key={highlight}
-                          className="flex items-start gap-3 text-sm text-slate-600"
-                        >
-                          <CheckCircle2
-                            size={16}
-                            className="mt-1 shrink-0 text-blue-600"
-                          />
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
+                <ServiceCard service={service} index={index} />
               </Reveal>
             ))}
           </div>
@@ -798,48 +931,12 @@ export default function OceanoLandingPage({
               transition={{ duration: 0.35 }}
               className="mt-10 grid gap-6 lg:grid-cols-3"
             >
-              {additionalSolutions.map((service) => (
-                <article
+              {additionalSolutions.map((service, index) => (
+                <ServiceCard
                   key={service.title}
-                  className="group flex h-full min-h-[34rem] flex-col overflow-hidden rounded-lg border border-slate-200 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl"
-                >
-                  <div className="relative h-56 overflow-hidden">
-                    <Image
-                      src={service.image}
-                      alt={service.title}
-                      fill
-                      sizes="(min-width: 1024px) 33vw, 100vw"
-                      className="object-cover transition duration-700 group-hover:scale-105"
-                    />
-                    <div className="absolute inset-0 bg-gradient-to-t from-slate-950/65 via-slate-950/10 to-transparent" />
-                    <span className="absolute bottom-4 left-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-700 shadow-sm">
-                      {service.area}
-                    </span>
-                  </div>
-
-                  <div className="flex flex-1 flex-col p-6">
-                    <h3 className="mb-3 text-xl font-extrabold leading-tight text-slate-900">
-                      {service.title}
-                    </h3>
-                    <p className="mb-5 text-sm leading-relaxed text-slate-600">
-                      {service.description}
-                    </p>
-                    <ul className="mt-auto space-y-3 border-t border-slate-100 pt-5">
-                      {service.highlights.map((highlight) => (
-                        <li
-                          key={highlight}
-                          className="flex items-start gap-3 text-sm text-slate-600"
-                        >
-                          <CheckCircle2
-                            size={16}
-                            className="mt-1 shrink-0 text-blue-600"
-                          />
-                          <span>{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </article>
+                  service={service}
+                  index={index + featuredSolutions.length}
+                />
               ))}
             </motion.div>
           )}
