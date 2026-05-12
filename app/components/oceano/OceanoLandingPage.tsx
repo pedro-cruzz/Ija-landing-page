@@ -912,6 +912,36 @@ export default function OceanoLandingPage({
       icon: Microscope,
     },
   ];
+  const newsItems = [
+    {
+      category: "Educação",
+      date: "09 fev. 2026",
+      title: "FUPAI e Oceano Azul lançam curso profissional de drones",
+      description:
+        "Parceria voltada à formação técnica, segurança operacional e uso profissional de drones em diferentes aplicações.",
+      href: "https://fupai.org.br/2026/02/fupai-e-oceano-azul-lancam-curso-de-pilotagem-de-drones-com-foco-em-uso-profissional-e-seguranca/",
+      sourceLabel: "FUPAI",
+      media: {
+        type: "image",
+        src: "https://fupai.org.br/wp-content/uploads/2026/02/capa_noticia_04.png",
+        alt: "Imagem de capa da notícia da FUPAI sobre o curso de drones",
+      },
+    },
+    {
+      category: "PDI",
+      date: "Ecossistema",
+      title: "Itajubá HardTech como ambiente de inovação aplicada",
+      description:
+        "Como parte do ecossistema Itajubá HardTech, a Oceano Azul integra a rede de inovação de alta complexidade, conectando-se a empresas, universidades e governo para transformar tecnologia em soluções reais.",
+      href: "https://www.itajubahardtech.com.br/",
+      sourceLabel: "Itajubá HardTech",
+      media: {
+        type: "image",
+        src: "https://www.itajubahardtech.com.br/wp-content/uploads/2026/01/O-maior-evento-de-TECNOLOGIA-E-INOVACAO-do-Sul-de-Minas-1.png",
+        alt: "Imagem oficial do ecossistema Itajubá HardTech",
+      },
+    },
+  ];
   const footerServices = [
     { label: "Pulverização Agrícola", href: "#servicos" },
     { label: "Combate à Dengue", href: "#servicos" },
@@ -925,6 +955,7 @@ export default function OceanoLandingPage({
     { label: "Nossa Frota", href: "#ficha-tecnica" },
     { label: "Missão, Visão e Valores", type: "button" },
     { label: "Cursos e Capacitação", href: "#cursos" },
+    { label: "Novidades", href: "#novidades" },
     { label: "P&D", href: "#ficha-tecnica" },
   ];
   const footerSupport = [
@@ -939,10 +970,32 @@ export default function OceanoLandingPage({
   ];
   const operationalNumbers = caseNumbers.slice(0, 3);
   const territorialNumber = caseNumbers[3];
+  const [selectedNews, setSelectedNews] = useState<
+    (typeof newsItems)[number] | null
+  >(null);
 
   React.useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
+
+  React.useEffect(() => {
+    if (!selectedNews) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setSelectedNews(null);
+      }
+    };
+
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [selectedNews]);
 
   return (
     <div className="min-h-screen bg-white font-sans text-slate-900">
@@ -1698,6 +1751,142 @@ export default function OceanoLandingPage({
           </div>
         </Container>
       </section>
+
+      {/* NOVIDADES */}
+      <section
+        id="novidades"
+        className="py-20 border-t border-blue-100/70 bg-[linear-gradient(180deg,#f3f8ff_0%,#ffffff_100%)]"
+      >
+        <Container>
+          <div className="mx-auto mb-12 flex max-w-4xl flex-col items-center text-center">
+            <Reveal width="100%">
+              <span className="mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-white px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600">
+                <CalendarDays size={12} /> Novidades
+              </span>
+            </Reveal>
+            <Reveal delay={0.1} width="100%">
+              <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
+                Notícias e movimentos que conectam{" "}
+                <span className="text-blue-600">inovação e operação</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-600">
+                Acompanhe iniciativas públicas, parcerias e ambientes de
+                inovação ligados à atuação da Oceano Azul com drones, PDI e
+                tecnologia aplicada.
+              </p>
+            </Reveal>
+          </div>
+
+          <div className="mx-auto grid max-w-5xl gap-6 md:grid-cols-2">
+            {newsItems.map((item, index) => (
+              <Reveal
+                key={item.title}
+                delay={index * 0.06}
+                width="100%"
+                className="h-full"
+              >
+                <button
+                  type="button"
+                  onClick={() => setSelectedNews(item)}
+                  className="group flex h-full min-h-[21rem] flex-col rounded-3xl border border-slate-200/60 bg-white p-8 text-left shadow-sm transition-all hover:-translate-y-1 hover:border-sky-200/50 hover:shadow-xl"
+                >
+                  <div className="mb-6 flex items-center justify-between gap-4">
+                    <span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-600">
+                      {item.category}
+                    </span>
+                    <span className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                      {item.date}
+                    </span>
+                  </div>
+                  <h3 className="mb-4 text-xl font-bold leading-tight text-slate-900 transition-colors group-hover:text-blue-700">
+                    {item.title}
+                  </h3>
+                  <p className="leading-relaxed text-slate-600">
+                    {item.description}
+                  </p>
+                  <span className="mt-auto inline-flex items-center gap-2 pt-8 text-sm font-bold text-blue-600">
+                    Abrir notícia
+                    <ArrowUpRight
+                      size={16}
+                      className="transition-transform group-hover:-translate-y-0.5 group-hover:translate-x-0.5"
+                    />
+                  </span>
+                </button>
+              </Reveal>
+            ))}
+          </div>
+        </Container>
+      </section>
+
+      {selectedNews ? (
+        <div
+          className="fixed inset-0 z-[70] flex items-center justify-center bg-slate-950/70 px-4 py-6 backdrop-blur-sm"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="news-modal-title"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              setSelectedNews(null);
+            }
+          }}
+        >
+          <div className="relative grid max-h-[92vh] w-full max-w-5xl overflow-hidden rounded-3xl bg-white shadow-2xl shadow-slate-950/30 lg:grid-cols-[1.05fr_0.95fr]">
+            <button
+              type="button"
+              onClick={() => setSelectedNews(null)}
+              className="absolute right-4 top-4 z-20 flex h-10 w-10 items-center justify-center rounded-full bg-white/95 text-slate-700 shadow-lg shadow-slate-950/10 transition hover:bg-blue-600 hover:text-white"
+              aria-label="Fechar novidade"
+            >
+              <X size={19} />
+            </button>
+
+            <div className="relative min-h-[18rem] bg-sky-50 lg:min-h-[32rem]">
+              <Image
+                src={selectedNews.media.src}
+                alt={selectedNews.media.alt}
+                fill
+                sizes="(min-width: 1024px) 50vw, 100vw"
+                className="object-cover"
+              />
+            </div>
+
+            <div className="overflow-y-auto p-7 md:p-9 lg:p-10">
+              <div className="mb-6 flex flex-wrap items-center gap-3">
+                <span className="rounded-full bg-sky-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-600">
+                  {selectedNews.category}
+                </span>
+                <span className="text-xs font-bold uppercase tracking-wide text-slate-400">
+                  {selectedNews.date}
+                </span>
+              </div>
+              <h3
+                id="news-modal-title"
+                className="text-2xl font-extrabold leading-tight text-slate-950 md:text-3xl"
+              >
+                {selectedNews.title}
+              </h3>
+              <p className="mt-5 text-base leading-relaxed text-slate-600">
+                {selectedNews.description}
+              </p>
+              <p className="mt-5 text-sm leading-relaxed text-slate-500">
+                Este card resume uma fonte pública e mantém o link original
+                disponível para consulta, validação e leitura completa.
+              </p>
+              <a
+                href={selectedNews.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/25 transition hover:bg-blue-700"
+              >
+                Ver fonte: {selectedNews.sourceLabel}
+                <ArrowUpRight size={16} />
+              </a>
+            </div>
+          </div>
+        </div>
+      ) : null}
 
       {/* CTA AZUL */}
       <section
