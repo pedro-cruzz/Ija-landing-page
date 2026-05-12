@@ -13,6 +13,7 @@ import {
   BookOpen,
   Menu,
   X,
+  Play,
   Phone,
   Mail,
   Instagram,
@@ -115,28 +116,35 @@ function HeroVideo() {
 }
 
 function StarlinkDifferentialCard() {
+  const videoRef = React.useRef<HTMLVideoElement | null>(null);
+  const [isStarlinkVideoPlaying, setIsStarlinkVideoPlaying] = useState(false);
+
+  const handleStarlinkVideoPlay = () => {
+    void videoRef.current?.play();
+  };
+
   return (
     <Reveal delay={0.18} className="md:col-span-2 lg:col-span-3" width="100%">
-      <article className="grid overflow-hidden rounded-3xl border border-blue-100 bg-slate-950 shadow-2xl shadow-blue-950/15 lg:grid-cols-[0.95fr_1.35fr]">
-        <div className="relative isolate flex flex-col justify-center p-7 text-white md:p-9 lg:p-10">
-          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(59,130,246,0.34),transparent_34%)]" />
-          <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-blue-50">
+      <article className="grid overflow-hidden rounded-3xl border border-blue-100 bg-white shadow-sm shadow-blue-950/5 lg:grid-cols-[0.95fr_1.35fr]">
+        <div className="relative isolate flex flex-col justify-center p-7 text-slate-900 md:p-9 lg:p-10">
+          <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.12),transparent_34%),linear-gradient(180deg,#ffffff_0%,#f3f8ff_100%)]" />
+          <span className="mb-5 inline-flex w-fit items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-blue-600">
             <Wifi size={13} /> Conectividade em campo
           </span>
           <h3 className="max-w-xl text-2xl font-extrabold leading-tight tracking-tight md:text-3xl">
             Starlink como diferencial para operações em áreas remotas
           </h3>
-          <p className="mt-5 max-w-xl text-sm leading-relaxed text-blue-50/85 md:text-base">
+          <p className="mt-5 max-w-xl text-sm leading-relaxed text-slate-600 md:text-base">
             A internet via satélite amplia a comunicação da equipe, o suporte
             técnico e o envio de dados operacionais mesmo em regiões com baixa
             cobertura de sinal.
           </p>
-          <div className="mt-7 grid gap-3 text-sm text-blue-50/90 sm:grid-cols-3">
+          <div className="mt-7 grid gap-3 text-sm text-blue-700 sm:grid-cols-3">
             {["Conexão estável", "Suporte remoto", "Dados em campo"].map(
               (item) => (
                 <span
                   key={item}
-                  className="rounded-2xl border border-white/10 bg-white/10 px-3 py-2 font-bold"
+                  className="rounded-2xl border border-blue-100 bg-white px-3 py-2 font-bold shadow-sm shadow-blue-950/5"
                 >
                   {item}
                 </span>
@@ -144,15 +152,29 @@ function StarlinkDifferentialCard() {
             )}
           </div>
         </div>
-        <div className="bg-slate-900 p-4 md:p-5">
-          <div className="overflow-hidden rounded-2xl border border-white/10 bg-black">
+        <div className="flex items-center justify-center bg-blue-50/60 p-4 md:p-5">
+          <div className="relative w-full max-w-[19rem] overflow-hidden rounded-2xl border border-blue-100 bg-white shadow-sm">
             <video
-              className="aspect-video w-full bg-black object-contain"
+              ref={videoRef}
+              className="aspect-[9/16] w-full object-cover"
               src="/videos/vídeo-informatico-starlink.mp4"
               controls
               playsInline
               preload="metadata"
+              onPlay={() => setIsStarlinkVideoPlaying(true)}
+              onPause={() => setIsStarlinkVideoPlaying(false)}
+              onEnded={() => setIsStarlinkVideoPlaying(false)}
             />
+            {!isStarlinkVideoPlaying ? (
+              <button
+                type="button"
+                onClick={handleStarlinkVideoPlay}
+                className="absolute left-1/2 top-1/2 flex h-16 w-16 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full border border-white/70 bg-white/95 text-blue-600 shadow-2xl shadow-blue-950/25 transition hover:scale-105 hover:bg-blue-600 hover:text-white focus:outline-none focus:ring-4 focus:ring-blue-200"
+                aria-label="Reproduzir vídeo sobre conectividade Starlink"
+              >
+                <Play size={26} className="ml-1 fill-current" />
+              </button>
+            ) : null}
           </div>
         </div>
       </article>
@@ -224,7 +246,7 @@ function AnimatedCaseValue({
   const valueRef = React.useRef<HTMLSpanElement | null>(null);
   const [hasStarted, setHasStarted] = React.useState(false);
   const [displayValue, setDisplayValue] = React.useState(
-    countTo ? `0${suffix}` : value
+    countTo ? "0" : value
   );
 
   React.useEffect(() => {
@@ -259,7 +281,7 @@ function AnimatedCaseValue({
       const easedProgress = 1 - Math.pow(1 - progress, 3);
       const currentValue = Math.round(countTo * easedProgress);
 
-      setDisplayValue(`${currentValue.toLocaleString("pt-BR")}${suffix}`);
+      setDisplayValue(currentValue.toLocaleString("pt-BR"));
 
       if (progress < 1) {
         animationFrame = requestAnimationFrame(animate);
@@ -274,9 +296,16 @@ function AnimatedCaseValue({
   return (
     <span
       ref={valueRef}
-      className={`block font-extrabold tracking-tight tabular-nums ${className}`}
+      className={`block whitespace-nowrap font-extrabold tracking-tight tabular-nums ${className}`}
     >
-      {countTo === undefined ? value : displayValue}
+      {countTo === undefined ? (
+        value
+      ) : (
+        <>
+          {displayValue}
+          {suffix ? <span className="text-[0.82em]">{suffix}</span> : null}
+        </>
+      )}
     </span>
   );
 }
@@ -394,7 +423,7 @@ function ImpactMetricCard({
           value={item.value}
           countTo={item.countTo}
           suffix={item.suffix}
-          className="text-5xl leading-none text-slate-950 md:text-6xl"
+          className="text-[2.8rem] leading-none text-slate-950 sm:text-5xl lg:text-[3.15rem] xl:text-[3.35rem]"
         />
         <span className="mt-3 text-sm font-extrabold uppercase tracking-[0.16em] text-blue-600">
           {item.label}
@@ -448,6 +477,54 @@ function TerritorialImpactCard({
               {area}
             </span>
           ))}
+        </div>
+      </article>
+    </Reveal>
+  );
+}
+
+function PublicSectorAuthorityCard() {
+  const publicSectorHighlights = [
+    "Prefeituras e secretarias municipais",
+    "Saúde pública e combate à dengue",
+    "Monitoramento urbano e apoio operacional",
+    "Mapeamento, fiscalização e infraestrutura",
+  ];
+
+  return (
+    <Reveal delay={0.22} width="100%">
+      <article className="relative isolate mt-5 overflow-hidden rounded-3xl border border-blue-100 bg-white p-7 shadow-sm shadow-blue-950/5 md:p-8">
+        <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.10),transparent_32%),linear-gradient(180deg,#ffffff_0%,#f5f9ff_100%)]" />
+        <div className="grid gap-7 lg:grid-cols-[0.95fr_1.35fr] lg:items-center">
+          <div>
+            <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-extrabold uppercase tracking-wider text-blue-600">
+              <Building2 size={13} /> Setor público
+            </span>
+            <h3 className="text-2xl font-extrabold tracking-tight text-slate-950 md:text-3xl">
+              Atuação junto a prefeituras e órgãos públicos
+            </h3>
+          </div>
+          <div>
+            <p className="text-sm leading-relaxed text-slate-600 md:text-base">
+              A Oceano Azul apoia gestões públicas em projetos de saúde,
+              segurança, fiscalização, infraestrutura e planejamento urbano,
+              com operações por drones, relatórios técnicos e suporte em campo.
+            </p>
+            <div className="mt-5 grid gap-2 sm:grid-cols-2">
+              {publicSectorHighlights.map((item) => (
+                <span
+                  key={item}
+                  className="flex items-start gap-2 rounded-2xl border border-blue-100 bg-white px-3 py-2 text-sm font-bold text-slate-700 shadow-sm shadow-blue-950/5"
+                >
+                  <CheckCircle2
+                    size={15}
+                    className="mt-0.5 shrink-0 text-blue-600"
+                  />
+                  {item}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
       </article>
     </Reveal>
@@ -787,22 +864,22 @@ export default function OceanoLandingPage({
   ];
   const coursePartnershipHighlights = [
     {
-      title: "Formação profissional",
+      title: "Oceano Azul em campo",
       description:
-        "Capacitação prática para preparar pessoas e equipes para novas demandas tecnológicas.",
+        "Experiência operacional com drones, aplicações técnicas e demandas reais de campo.",
+      icon: Bot,
+    },
+    {
+      title: "FUPAI em educação",
+      description:
+        "Base institucional para estruturar conhecimento, capacitação e formação profissional.",
       icon: GraduationCap,
     },
     {
-      title: "Cidades tecnológicas",
+      title: "Impacto aplicado",
       description:
-        "Conhecimento aplicado a soluções urbanas, inteligentes e conectadas ao futuro.",
+        "Cursos conectados a agricultura, cidades, saúde pública, infraestrutura e inovação.",
       icon: Building2,
-    },
-    {
-      title: "Impacto social",
-      description:
-        "Tecnologia e inovação como caminho para ampliar oportunidades em um novo Brasil.",
-      icon: Users,
     },
   ];
   const footerServices = [
@@ -1060,6 +1137,8 @@ export default function OceanoLandingPage({
               <TerritorialImpactCard item={territorialNumber} />
             ) : null}
           </div>
+
+          <PublicSectorAuthorityCard />
         </Container>
       </section>
 
@@ -1336,14 +1415,14 @@ export default function OceanoLandingPage({
             </Reveal>
             <Reveal delay={0.2}>
               <p className="mx-auto max-w-3xl text-lg leading-relaxed text-slate-600 md:text-xl">
-                Da capacitação profissional às cidades tecnológicas e
-                inteligentes: soluções que conectam tecnologia e impacto
-                social.
+                A experiência operacional da Oceano Azul se soma à tradição
+                educacional da FUPAI para criar capacitações conectadas às
+                demandas reais do campo, das cidades e da inovação.
               </p>
             </Reveal>
             <Reveal delay={0.25}>
               <p className="mt-5 text-sm font-bold uppercase tracking-wider text-blue-600">
-                Tecnologia, inovação e formação profissional para um novo
+                Tecnologia, educação e operação profissional para um novo
                 Brasil.
               </p>
             </Reveal>
@@ -1353,15 +1432,15 @@ export default function OceanoLandingPage({
             <div className="mx-auto mb-10 grid max-w-6xl overflow-hidden rounded-3xl border border-blue-100 bg-white shadow-sm md:grid-cols-[1fr_1.4fr]">
               <div className="flex flex-col justify-center bg-blue-600 p-7 text-white md:p-9">
                 <span className="mb-4 inline-flex w-fit items-center gap-2 rounded-full bg-white/15 px-3 py-1 text-xs font-bold uppercase tracking-wider text-white">
-                  <BookOpen size={12} /> União de forças
+                  <BookOpen size={12} /> Oceano Azul + FUPAI
                 </span>
                 <h3 className="text-2xl font-extrabold leading-tight md:text-3xl">
-                  Uma parceria para transformar conhecimento em oportunidade.
+                  Uma parceria entre operação técnica e formação profissional.
                 </h3>
                 <p className="mt-4 text-sm leading-relaxed text-blue-50 md:text-base">
-                  A união entre duas grandes empresas amplia o alcance da
-                  formação técnica e fortalece projetos preparados para o futuro
-                  do trabalho, das cidades e da inovação.
+                  A Oceano Azul leva a vivência prática das operações com
+                  drones. A FUPAI fortalece a base educacional para transformar
+                  esse conhecimento em capacitação estruturada e oportunidades.
                 </p>
               </div>
               <div className="grid gap-4 p-6 md:grid-cols-3 md:p-7">
