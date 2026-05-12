@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
+import coursePilotImage from "../../../public/images/curso_piloto.jpeg";
 import { motion } from "framer-motion";
 import {
   ArrowRight,
@@ -859,7 +860,7 @@ export default function OceanoLandingPage({
         "Cuidados básicos com equipamento, bateria e missão",
       ],
       icon: GraduationCap,
-      image: "/images/curso_piloto.jpeg",
+      image: coursePilotImage,
     },
   ];
   const coursePartnershipHighlights = [
@@ -1483,6 +1484,7 @@ export default function OceanoLandingPage({
                           alt={course.title}
                           width={1066}
                           height={1424}
+                          unoptimized
                           className="h-full w-auto max-w-full rounded-[1.5rem] object-contain shadow-sm"
                         />
                       </div>
