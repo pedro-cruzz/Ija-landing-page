@@ -191,7 +191,7 @@ export default function OceanoAboutPage({
           <div className="grid md:grid-cols-3 gap-6">
             {missionVisionValues.map((item, index) => (
               <Reveal key={item.title} delay={index * 0.08} width="100%">
-                <article className="h-full rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-all hover:border-blue-200 hover:shadow-xl">
+                <article className="h-full cursor-default rounded-2xl border border-slate-200 bg-white p-7 shadow-sm transition-colors duration-300 hover:border-slate-300 hover:bg-slate-50/70">
                   <div className="mb-6 flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
                     <item.icon size={22} />
                   </div>
@@ -233,11 +233,8 @@ export default function OceanoAboutPage({
               { icon: Map, label: "Infraestrutura" },
             ].map((area, i) => (
               <Reveal key={i} delay={i * 0.1} width="100%">
-                <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl flex flex-col items-center justify-center gap-3 hover:bg-blue-600 hover:border-blue-500 transition-all group cursor-default">
-                  <area.icon
-                    size={24}
-                    className="text-blue-400 group-hover:text-white transition-colors"
-                  />
+                <div className="bg-slate-800/50 border border-slate-700 p-6 rounded-2xl flex cursor-default flex-col items-center justify-center gap-3 transition-colors duration-300 hover:border-slate-600 hover:bg-slate-800/80">
+                  <area.icon size={24} className="text-blue-400" />
                   <span className="font-bold text-sm">{area.label}</span>
                 </div>
               </Reveal>

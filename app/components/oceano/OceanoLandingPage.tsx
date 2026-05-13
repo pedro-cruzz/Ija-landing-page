@@ -325,8 +325,8 @@ function ServiceCard({
   index: number;
 }) {
   return (
-    <article className="group relative isolate flex h-full min-h-[34rem] flex-col overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-sm shadow-blue-950/5 transition-all duration-500 hover:-translate-y-2 hover:border-blue-300 hover:shadow-2xl hover:shadow-blue-950/15">
-      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.14),transparent_36%)] opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+    <article className="relative isolate flex h-full min-h-[34rem] cursor-default flex-col overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-sm shadow-blue-950/5 transition-colors duration-300 hover:border-slate-300 hover:bg-slate-50/60">
+      <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.10),transparent_36%)] opacity-80" />
 
       <div className="relative h-60 overflow-hidden bg-slate-900">
         <Image
@@ -334,24 +334,21 @@ function ServiceCard({
           alt={service.title}
           fill
           sizes="(min-width: 1024px) 33vw, 100vw"
-          className="object-cover transition duration-700 group-hover:scale-110"
+          className="object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-blue-950/10 transition-opacity duration-500 group-hover:opacity-90" />
-        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-600/25 to-transparent opacity-0 transition-opacity duration-500 group-hover:opacity-100" />
+        <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-slate-950/20 to-blue-950/10" />
+        <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-blue-600/20 to-transparent" />
 
         <span className="absolute left-4 top-4 rounded-full border border-white/30 bg-white/15 px-3 py-1 text-xs font-extrabold text-white shadow-sm backdrop-blur">
           0{index + 1}
         </span>
-        <span className="absolute bottom-4 left-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-700 shadow-sm transition-transform duration-500 group-hover:-translate-y-1">
+        <span className="absolute bottom-4 left-4 rounded-full bg-white/95 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-700 shadow-sm">
           {service.area}
         </span>
-        <div className="absolute bottom-4 right-4 flex h-10 w-10 translate-y-3 items-center justify-center rounded-full bg-blue-600 text-white opacity-0 shadow-lg shadow-blue-950/20 transition-all duration-500 group-hover:translate-y-0 group-hover:opacity-100">
-          <ArrowUpRight size={18} />
-        </div>
       </div>
 
       <div className="flex flex-1 flex-col p-6">
-        <h3 className="mb-3 text-xl font-extrabold leading-tight text-slate-900 transition-colors duration-300 group-hover:text-blue-700">
+        <h3 className="mb-3 text-xl font-extrabold leading-tight text-slate-900">
           {service.title}
         </h3>
         <p className="mb-5 text-sm leading-relaxed text-slate-600">
@@ -365,7 +362,7 @@ function ServiceCard({
             >
               <CheckCircle2
                 size={16}
-                className="mt-1 shrink-0 text-blue-600 transition-transform duration-300 group-hover:scale-110"
+                className="mt-1 shrink-0 text-blue-600"
               />
               <span>{highlight}</span>
             </li>
@@ -410,10 +407,10 @@ function ImpactMetricCard({
 }) {
   return (
     <Reveal delay={index * 0.06} width="100%" className="h-full">
-      <article className="group relative isolate flex h-full min-h-[16rem] flex-col overflow-hidden rounded-3xl border border-blue-100 bg-white p-6 text-slate-900 shadow-sm shadow-blue-950/5 transition-all duration-300 hover:-translate-y-1 hover:border-blue-200 hover:shadow-xl hover:shadow-blue-950/10 md:p-7">
+      <article className="relative isolate flex h-full min-h-[16rem] cursor-default flex-col overflow-hidden rounded-3xl border border-blue-100 bg-white p-6 text-slate-900 shadow-sm shadow-blue-950/5 transition-colors duration-300 hover:border-slate-300 hover:bg-slate-50/60 md:p-7">
         <div className="pointer-events-none absolute inset-0 -z-10 bg-[radial-gradient(circle_at_top_right,rgba(37,99,235,0.10),transparent_42%)] opacity-80" />
         <div className="mb-7 flex items-center justify-between">
-          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600 transition-colors group-hover:bg-blue-600 group-hover:text-white">
+          <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-blue-50 text-blue-600">
             <item.icon size={23} />
           </div>
           <span className="text-xs font-extrabold tracking-[0.2em] text-blue-100">
@@ -672,6 +669,18 @@ export default function OceanoLandingPage({
         "Remoção suave de sujeira e poeira",
         "Redução de perdas de geração",
         "Intervenção rápida e prática",
+      ],
+    },
+    {
+      title: "Manutenção de Drones",
+      area: "Suporte técnico",
+      image: "/images/drones_empresa.jpeg",
+      description:
+        "Serviço técnico para inspeção, ajustes e manutenção preventiva de drones operacionais.",
+      highlights: [
+        "Diagnóstico de componentes e sensores",
+        "Ajustes para voo seguro e estável",
+        "Rotina preventiva para reduzir paradas",
       ],
     },
   ];
@@ -947,8 +956,9 @@ export default function OceanoLandingPage({
     { label: "Combate à Dengue", href: "#servicos" },
     { label: "Mapeamento e Geoprocessamento", href: "#servicos" },
     { label: "Inspeções Técnicas", href: "#servicos" },
-    { label: "Manejo de Vegetação", href: "#servicos" },
+    { label: "Manejo Inteligente de Vegetação", href: "#servicos" },
     { label: "Monitoramento de Eventos", href: "#servicos" },
+    { label: "Manutenção de Drones", href: "#servicos" },
   ];
   const footerCompany = [
     { label: "Quem Somos", type: "button" },
@@ -1340,8 +1350,8 @@ export default function OceanoLandingPage({
                 width="100%"
                 className="h-full"
               >
-                <article className="group relative flex h-full min-h-[15rem] flex-col overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-6 shadow-sm transition-all hover:border-sky-200/50 hover:shadow-xl">
-                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 transition-colors group-hover:bg-sky-500 group-hover:text-white">
+                <article className="relative flex h-full min-h-[15rem] cursor-default flex-col overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-6 shadow-sm transition-colors duration-300 hover:border-slate-300 hover:bg-slate-50/70">
+                  <div className="mb-5 flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600">
                     <item.icon size={22} />
                   </div>
                   <span className="mb-2 text-xs font-bold uppercase tracking-wide text-slate-400">
@@ -1401,9 +1411,9 @@ export default function OceanoLandingPage({
                   width="100%"
                   className="h-full"
                 >
-                  <article className="group relative flex h-full min-h-[18rem] flex-col overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-6 shadow-sm transition-all hover:border-sky-200/50 hover:shadow-xl">
+                  <article className="relative flex h-full min-h-[18rem] cursor-default flex-col overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-6 shadow-sm transition-colors duration-300 hover:border-slate-300 hover:bg-slate-50/70">
                     <div className="mb-5 flex items-start justify-between gap-4">
-                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 transition-colors group-hover:bg-sky-500 group-hover:text-white">
+                      <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600">
                         <category.icon size={22} />
                       </div>
                       <span className="text-xs font-extrabold tracking-wider text-slate-300">
@@ -1514,8 +1524,8 @@ export default function OceanoLandingPage({
                   width="100%"
                   className="h-full"
                 >
-                  <article className="group relative flex h-full min-h-[19rem] flex-col overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-8 shadow-sm transition-all hover:-translate-y-1 hover:border-sky-200/50 hover:shadow-xl">
-                    <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600 transition-colors group-hover:bg-sky-500 group-hover:text-white">
+                  <article className="relative flex h-full min-h-[19rem] cursor-default flex-col overflow-hidden rounded-3xl border border-slate-200/60 bg-white p-8 shadow-sm transition-colors duration-300 hover:border-slate-300 hover:bg-slate-50/70">
+                    <div className="mb-6 inline-flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-50 text-sky-600">
                       <pillar.icon size={21} />
                     </div>
                     <span className="mb-3 text-xs font-bold uppercase tracking-wide text-slate-400">
@@ -1614,7 +1624,7 @@ export default function OceanoLandingPage({
                 width="100%"
                 className="h-full"
               >
-                <article className="group grid overflow-hidden rounded-3xl border border-slate-200/60 bg-white shadow-sm transition-all hover:border-sky-200/50 hover:shadow-xl lg:grid-cols-[1.05fr_0.95fr]">
+                <article className="grid cursor-default overflow-hidden rounded-3xl border border-slate-200/60 bg-white shadow-sm transition-colors duration-300 hover:border-slate-300 hover:bg-slate-50/60 lg:grid-cols-[1.05fr_0.95fr]">
                   <div className="relative min-h-[18rem] overflow-hidden bg-sky-50 lg:min-h-[30rem]">
                     {course.image ? (
                       <div className="flex h-full items-center justify-center p-4">
