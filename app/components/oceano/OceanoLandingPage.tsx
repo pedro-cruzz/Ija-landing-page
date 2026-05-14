@@ -110,7 +110,9 @@ function HeroVideo() {
           loop
           playsInline
           preload="metadata"
-        />
+        >
+          Seu navegador não suporta vídeo HTML5.
+        </video>
       </div>
     </div>
   );
@@ -159,13 +161,16 @@ function StarlinkDifferentialCard() {
               ref={videoRef}
               className="aspect-[9/16] w-full object-cover"
               src="/videos/vídeo-informatico-starlink.mp4"
+              poster="/images/starlink.png"
               controls
               playsInline
               preload="metadata"
               onPlay={() => setIsStarlinkVideoPlaying(true)}
               onPause={() => setIsStarlinkVideoPlaying(false)}
               onEnded={() => setIsStarlinkVideoPlaying(false)}
-            />
+            >
+              Seu navegador não suporta vídeo HTML5.
+            </video>
             {!isStarlinkVideoPlaying ? (
               <button
                 type="button"
@@ -244,59 +249,11 @@ function AnimatedCaseValue({
   suffix?: string;
   className?: string;
 }) {
-  const valueRef = React.useRef<HTMLSpanElement | null>(null);
-  const [hasStarted, setHasStarted] = React.useState(false);
-  const [displayValue, setDisplayValue] = React.useState(
-    countTo ? "0" : value
-  );
-
-  React.useEffect(() => {
-    const currentValue = valueRef.current;
-
-    if (!currentValue || countTo === undefined || hasStarted) return;
-
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setHasStarted(true);
-          observer.disconnect();
-        }
-      },
-      { threshold: 0.5 }
-    );
-
-    observer.observe(currentValue);
-
-    return () => observer.disconnect();
-  }, [countTo, hasStarted]);
-
-  React.useEffect(() => {
-    if (!hasStarted || countTo === undefined) return;
-
-    const duration = 850;
-    const startedAt = performance.now();
-    let animationFrame = 0;
-
-    const animate = (now: number) => {
-      const progress = Math.min((now - startedAt) / duration, 1);
-      const easedProgress = 1 - Math.pow(1 - progress, 3);
-      const currentValue = Math.round(countTo * easedProgress);
-
-      setDisplayValue(currentValue.toLocaleString("pt-BR"));
-
-      if (progress < 1) {
-        animationFrame = requestAnimationFrame(animate);
-      }
-    };
-
-    animationFrame = requestAnimationFrame(animate);
-
-    return () => cancelAnimationFrame(animationFrame);
-  }, [countTo, hasStarted, suffix]);
+  const displayValue =
+    countTo === undefined ? value : countTo.toLocaleString("pt-BR");
 
   return (
     <span
-      ref={valueRef}
       className={`block font-extrabold tracking-tight tabular-nums ${className}`}
     >
       {countTo === undefined ? (
@@ -525,6 +482,174 @@ function PublicSectorAuthorityCard() {
           </div>
         </div>
       </article>
+    </Reveal>
+  );
+}
+
+type RealOperationCase = {
+  title: string;
+  area: string;
+  location: string;
+  challenge: string;
+  solution: string;
+  result: string;
+  resultLabel: string;
+  metrics: string[];
+  technicalDetails: {
+    label: string;
+    value: string;
+  }[];
+  media: {
+    type: "image" | "video";
+    src: string;
+    poster?: string;
+    alt: string;
+    note: string;
+  };
+};
+
+function OperationCaseCard({
+  operationCase,
+  index,
+}: {
+  operationCase: RealOperationCase;
+  index: number;
+}) {
+  return (
+    <Reveal delay={index * 0.08} width="100%" className="h-full">
+      <article className="group relative isolate grid h-full overflow-hidden rounded-lg border border-slate-200/80 bg-white shadow-sm shadow-blue-950/5 transition-colors duration-300 hover:border-blue-200 hover:bg-slate-50/60 lg:min-h-[21rem] lg:grid-cols-[minmax(0,1fr)_minmax(18rem,22rem)] lg:items-center">
+        <div className="flex flex-col justify-center p-5 sm:p-6">
+          <div className="flex flex-wrap gap-2">
+            <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-700 shadow-sm">
+              {operationCase.area}
+            </span>
+            <span className="rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-bold text-slate-600 shadow-sm">
+              {operationCase.location}
+            </span>
+          </div>
+
+          <h3 className="mt-4 text-2xl font-extrabold leading-tight text-slate-950 md:text-[1.5rem]">
+            {operationCase.title}
+          </h3>
+
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-slate-600">
+            {operationCase.challenge}
+          </p>
+
+          <div className="mt-4 rounded-2xl border border-blue-100 bg-blue-50/70 p-4">
+            <span className="text-xs font-extrabold uppercase tracking-wide text-blue-600">
+              {operationCase.resultLabel}
+            </span>
+            <p className="mt-1.5 text-base font-extrabold leading-snug text-slate-950">
+              {operationCase.result}
+            </p>
+            <ul className="mt-4 flex flex-wrap gap-2">
+              {operationCase.metrics.map((metric) => (
+                <li
+                  key={metric}
+                  className="inline-flex items-center gap-2 rounded-full bg-white px-3 py-1.5 text-xs font-bold text-slate-700 shadow-sm"
+                >
+                  <CheckCircle2
+                    size={14}
+                    className="shrink-0 text-blue-600"
+                  />
+                  <span>{metric}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <dl className="mt-3 grid gap-2 rounded-2xl border border-slate-200 bg-white p-4 sm:grid-cols-2">
+            {operationCase.technicalDetails.map((detail) => (
+              <div key={detail.label}>
+                <dt className="text-[0.68rem] font-extrabold uppercase tracking-wide text-slate-400">
+                  {detail.label}
+                </dt>
+                <dd className="mt-0.5 text-xs font-bold leading-snug text-slate-800 sm:text-sm">
+                  {detail.value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+        </div>
+
+        <div
+          className={`relative order-first flex items-center justify-center overflow-hidden bg-slate-950 lg:order-none ${
+            operationCase.media.type === "video"
+              ? "h-[30rem] p-4 lg:h-auto lg:p-5"
+              : "h-64 sm:h-72 lg:h-auto"
+          }`}
+        >
+          {operationCase.media.type === "video" ? (
+            <video
+              className="aspect-[9/16] h-auto w-full max-w-[19rem] object-contain"
+              src={operationCase.media.src}
+              poster={operationCase.media.poster}
+              controls
+              playsInline
+              preload="metadata"
+            >
+              Seu navegador não suporta vídeo HTML5.
+            </video>
+          ) : (
+            <Image
+              src={operationCase.media.src}
+              alt={operationCase.media.alt}
+              fill
+              sizes="(min-width: 1280px) 25vw, (min-width: 768px) 50vw, 100vw"
+              className="object-cover transition duration-500 group-hover:scale-105"
+            />
+          )}
+
+          {operationCase.media.type === "image" ? (
+            <div className="absolute inset-0 bg-gradient-to-t from-slate-950/15 via-transparent to-blue-950/10" />
+          ) : null}
+
+          <span className="absolute bottom-4 left-4 z-20 rounded-full bg-white/95 px-3 py-1 text-xs font-bold uppercase tracking-wide text-blue-700 shadow-sm">
+            {operationCase.media.note}
+          </span>
+        </div>
+      </article>
+    </Reveal>
+  );
+}
+
+function InlineCtaBand({
+  title,
+  description,
+  primaryLabel,
+  secondaryLabel,
+}: {
+  title: string;
+  description: string;
+  primaryLabel: string;
+  secondaryLabel: string;
+}) {
+  return (
+    <Reveal width="100%">
+      <div className="mt-10 flex flex-col gap-5 rounded-lg border border-blue-100 bg-blue-50/80 p-5 shadow-sm shadow-blue-950/5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
+        <div>
+          <h3 className="text-xl font-extrabold leading-tight text-slate-950">
+            {title}
+          </h3>
+          <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-600">
+            {description}
+          </p>
+        </div>
+        <div className="flex flex-col gap-3 sm:flex-row lg:shrink-0">
+          <a href="#contato-oceano" className="w-full sm:w-auto">
+            <button className="flex w-full items-center justify-center gap-2 rounded-full bg-blue-600 px-6 py-3 text-sm font-bold text-white shadow-lg shadow-blue-600/20 transition hover:bg-blue-700 sm:w-auto">
+              {primaryLabel}
+              <ArrowRight size={16} />
+            </button>
+          </a>
+          <a href="#contato-oceano" className="w-full sm:w-auto">
+            <button className="w-full rounded-full border border-blue-200 bg-white px-6 py-3 text-sm font-bold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50 sm:w-auto">
+              {secondaryLabel}
+            </button>
+          </a>
+        </div>
+      </div>
     </Reveal>
   );
 }
@@ -776,6 +901,97 @@ export default function OceanoLandingPage({
       description:
         "Projetos realizados em diversos estados e municípios, com adaptação ao contexto de cada operação.",
       icon: MapPin,
+    },
+  ];
+  const realOperationCases: RealOperationCase[] = [
+    {
+      title: "Pulverização agrícola em operação de grande área",
+      area: "Agro",
+      location: "Cliente agroindustrial, divulgação restrita",
+      challenge:
+        "Aplicação em grande área com janela curta, rastreabilidade e menor exposição da equipe.",
+      solution:
+        "Planejamento de voo por talhão, equipe técnica dedicada e aplicação com drone pulverizador ajustado ao produto, à cultura e às condições da área.",
+      result:
+        "Mais agilidade, cobertura uniforme e operação documentada.",
+      resultLabel: "Resultado a destacar",
+      metrics: [
+        "Talhões produtivos atendidos",
+        "Aplicação aérea direcionada",
+        "Registro técnico por operação",
+      ],
+      technicalDetails: [
+        { label: "Área", value: "Talhões agrícolas" },
+        { label: "Drone", value: "Pulverizador com vazão controlada" },
+        { label: "Entrega", value: "Fotos e relatório técnico" },
+        { label: "Ganho", value: "Mais velocidade e menor pisoteio" },
+      ],
+      media: {
+        type: "video",
+        src: "/videos/video-case-agro.mp4",
+        poster: "/images/agro.png",
+        alt: "Operação agrícola com drone pulverizador",
+        note: "Vídeo de operação",
+      },
+    },
+    {
+      title: "Apoio ao combate à dengue em perímetro urbano",
+      area: "Saúde pública",
+      location: "Município parceiro, divulgação restrita",
+      challenge:
+        "Apoio rápido em pontos urbanos de difícil acesso, integrado às equipes municipais.",
+      solution:
+        "Operação com drones para aplicação direcionada, monitoramento aéreo e suporte técnico às frentes de combate ao vetor.",
+      result:
+        "Mais cobertura em campo e melhor apoio ao controle do vetor.",
+      resultLabel: "Impacto público",
+      metrics: [
+        "Perímetro urbano coberto",
+        "Acesso a pontos críticos",
+        "Apoio a equipes municipais",
+      ],
+      technicalDetails: [
+        { label: "Área", value: "Terrenos e pontos de foco" },
+        { label: "Drone", value: "Aplicação + câmera RGB" },
+        { label: "Entrega", value: "Vídeo, fotos e relatório" },
+        { label: "Ganho", value: "Acesso rápido a áreas críticas" },
+      ],
+      media: {
+        type: "video",
+        src: "/videos/video-case-dengue.mp4",
+        poster: "/images/dengue.png",
+        alt: "Operação urbana de combate à dengue com drone",
+        note: "Vídeo de operação",
+      },
+    },
+    {
+      title: "Inspeção aérea de ativos de energia e infraestrutura",
+      area: "Energia e infraestrutura",
+      location: "Cliente de infraestrutura, divulgação restrita",
+      challenge:
+        "Inspeção de estruturas críticas com menos exposição de equipe e menor interferência operacional.",
+      solution:
+        "Voo técnico com drone de inspeção, captura visual de alta resolução e organização das evidências por ativo para análise da manutenção.",
+      result:
+        "Evidências organizadas para manutenção preventiva e priorização de intervenções.",
+      resultLabel: "Entrega operacional",
+      metrics: [
+        "Torres e estruturas inspecionadas",
+        "Imagens de alta resolução",
+        "Relatório técnico com achados",
+      ],
+      technicalDetails: [
+        { label: "Ativo", value: "Torres, linhas e estruturas" },
+        { label: "Drone", value: "Inspeção com câmera RGB" },
+        { label: "Entrega", value: "Fotos, mapa visual e diagnóstico" },
+        { label: "Ganho", value: "Menor risco e triagem mais rápida" },
+      ],
+      media: {
+        type: "image",
+        src: "/images/inspecao_torres.jpeg",
+        alt: "Inspeção aérea de torres e ativos de energia com drone",
+        note: "Foto de operação",
+      },
     },
   ];
   const fleetCategories = [
@@ -1256,6 +1472,51 @@ export default function OceanoLandingPage({
         </Container>
       </section>
 
+      {/* OPERAÇÕES REAIS */}
+      <section
+        id="operacoes-reais"
+        className="border-t border-slate-200/70 bg-white py-20"
+      >
+        <Container>
+          <div className="mx-auto mb-16 flex max-w-4xl flex-col items-center text-center">
+            <Reveal width="100%">
+              <span className="mx-auto mb-6 inline-flex items-center gap-2 rounded-full border border-blue-100 bg-blue-50 px-3 py-1 text-xs font-bold uppercase tracking-wider text-blue-600">
+                <Target size={12} /> Operações reais
+              </span>
+            </Reveal>
+            <Reveal delay={0.1} width="100%">
+              <h2 className="mb-6 text-3xl font-extrabold tracking-tight text-slate-900 md:text-5xl">
+                Cases de campo com <br />
+                <span className="text-blue-600">histórias reais</span>
+              </h2>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="mx-auto max-w-2xl text-lg leading-relaxed text-slate-600">
+                Uma área para apresentar operações da Oceano Azul com contexto,
+                solução aplicada, resultado e registros de foto ou vídeo em
+                campo.
+              </p>
+            </Reveal>
+          </div>
+          <div className="grid gap-6">
+            {realOperationCases.map((operationCase, index) => (
+              <OperationCaseCard
+                key={operationCase.title}
+                operationCase={operationCase}
+                index={index}
+              />
+            ))}
+          </div>
+
+          <InlineCtaBand
+            title="Quer transformar um caso real em plano de operação?"
+            description="A equipe técnica avalia área, risco, entregáveis necessários e a melhor configuração de drone para o seu cenário."
+            primaryLabel="Solicitar avaliação técnica"
+            secondaryLabel="Falar com especialista"
+          />
+        </Container>
+      </section>
+
       <PartnerLogoCarousel />
 
       {/* NOSSAS SOLUÇÕES */}
@@ -1333,6 +1594,13 @@ export default function OceanoLandingPage({
               ))}
             </motion.div>
           )}
+
+          <InlineCtaBand
+            title="Planeje a operação antes de mobilizar equipe"
+            description="Compartilhe área, tipo de ativo ou objetivo técnico para estimarmos método, entregáveis e equipe necessária."
+            primaryLabel="Planejar operação com drones"
+            secondaryLabel="Solicitar avaliação técnica"
+          />
         </Container>
       </section>
 
@@ -1724,8 +1992,8 @@ export default function OceanoLandingPage({
             </Reveal>
             <Reveal delay={0.2}>
               <p className="text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">
-                Benefícios comprovados que fazem a diferença real no seu
-                negócio.
+                Benefícios operacionais que ganham força quando são avaliados
+                por área, produto, cultura, clima e método de aplicação.
               </p>
             </Reveal>
           </div>
@@ -1734,7 +2002,7 @@ export default function OceanoLandingPage({
             <FeatureCard
               title="Economia de Tempo"
               icon={Clock}
-              desc="Até 60x mais rápido que pulverização tradicional."
+              desc="Até 60x mais rápido em comparação com aplicação manual, variando conforme área, cultura, produto e logística."
               delay={0}
             />
             <FeatureCard
@@ -1746,7 +2014,7 @@ export default function OceanoLandingPage({
             <FeatureCard
               title="Sustentabilidade"
               icon={Leaf}
-              desc="Economia de até 90% de água nas aplicações."
+              desc="Economia de até 90% de água em comparação com aplicação manual, conforme dose, alvo, cultura e recomendação técnica."
               delay={0.1}
             />
             <FeatureCard
